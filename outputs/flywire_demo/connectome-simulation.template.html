@@ -1,0 +1,602 @@
+<div id="flywire-connectome-simulation-v1">
+  <h2>Connectome FlyWire: mapa i pobudzenie</h2>
+  <label class="form-label" for="sim-center">Obwód: neuron centralny
+    <select class="form-select" id="sim-center"></select>
+  </label>
+  <div class="nav nav-pills" role="tablist" aria-label="Widok connectomu">
+    <button class="nav-link active" id="sim-map-tab" role="tab" aria-controls="sim-map-panel" aria-selected="true" type="button">Mapa połączeń</button>
+    <button class="nav-link" id="sim-model-tab" role="tab" aria-controls="sim-model-panel" aria-selected="false" type="button">Model krokowy</button>
+  </div>
+  <div id="sim-map-panel" role="tabpanel" aria-labelledby="sim-map-tab">
+    <div class="viz-controls">
+      <label class="form-label" for="sim-direction">Kierunek
+        <select class="form-select" id="sim-direction">
+          <option value="both">Wejścia i wyjścia</option>
+          <option value="in">Do neuronu</option>
+          <option value="out">Od neuronu</option>
+        </select>
+      </label>
+      <label class="form-label" for="sim-count">
+        <span>Partnerzy na stronę: <output id="sim-count-value">10</output></span>
+        <input class="form-range" id="sim-count" type="range" min="4" max="12" step="1" value="10">
+      </label>
+    </div>
+  </div>
+  <div id="sim-model-panel" role="tabpanel" aria-labelledby="sim-model-tab" hidden>
+    <label class="form-label" for="sim-target">Neuron pobudzany
+      <select class="form-select" id="sim-target"></select>
+    </label>
+    <div class="viz-controls">
+      <label class="form-label" for="sim-strength">
+        <span>Bodziec: <output id="sim-strength-value">80%</output></span>
+        <input class="form-range" id="sim-strength" type="range" min="20" max="100" step="5" value="80">
+      </label>
+      <label class="form-label" for="sim-threshold">
+        <span>Próg: <output id="sim-threshold-value">55%</output></span>
+        <input class="form-range" id="sim-threshold" type="range" min="20" max="90" step="5" value="55">
+      </label>
+      <div class="viz-row sim-actions">
+        <button class="btn btn-primary" id="sim-stimulate" type="button">Pobudź neuron</button>
+        <button class="btn" id="sim-play" type="button" aria-pressed="false" disabled><span id="sim-play-icon"><i data-lucide="play" aria-hidden="true"></i></span><span id="sim-pause-icon" hidden><i data-lucide="pause" aria-hidden="true"></i></span><span id="sim-play-label">Start</span></button>
+        <button class="btn" id="sim-step" type="button" disabled>Krok</button>
+        <button class="btn btn-ghost" id="sim-reset" type="button">Reset</button>
+      </div>
+      <label class="form-label" for="sim-speed">Tempo
+        <select class="form-select" id="sim-speed">
+          <option value="0.5">0,5 kroku/s</option><option value="1" selected>1 krok/s</option><option value="2">2 kroki/s</option><option value="4">4 kroki/s</option>
+        </select>
+      </label>
+    </div>
+    <p class="text-small text-muted sim-model-note">Model dydaktyczny: neuron centralny i 12 najsilniejszych odbiorców; waga względna z liczby synaps, sygnał dodatni, po kroku zostaje 35% aktywacji.</p>
+  </div>
+  <svg class="connectome-graph" role="group" aria-labelledby="sim-svg-title sim-svg-desc" viewBox="0 0 736 520">
+    <title id="sim-svg-title">Rzeczywiste połączenia wybranego neuronu</title>
+    <desc id="sim-svg-desc">Mapa pokazuje kierunki i względne wagi połączeń. Model krokowy podświetla neurony przekraczające wybrany próg.</desc>
+    <defs>
+      <marker id="sim-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse">
+        <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--muted-foreground)"></path>
+      </marker>
+    </defs>
+    <g id="sim-drawing"></g>
+  </svg>
+  <p id="sim-inspector" class="text-small" aria-live="polite"></p>
+  <div class="viz-row connectome-summary" id="sim-summary" aria-live="polite"></div>
+  <div id="sim-history-panel" hidden>
+    <svg id="sim-history" role="img" aria-labelledby="sim-history-title" viewBox="0 0 736 160">
+      <title id="sim-history-title">Liczba aktywnych neuronów w kolejnych krokach</title>
+      <g id="sim-history-drawing"></g>
+    </svg>
+  </div>
+  <p class="text-small text-muted">Źródło: FlyWire FAFB v783 · wagi sumowane po neuropilach · typy neuroprzekaźników są predykcjami</p>
+  <script type="application/json" id="sim-data">__CONNECTOME_DATA__</script>
+  <style>
+    #flywire-connectome-simulation-v1 { color: var(--foreground); width: 100%; }
+    #flywire-connectome-simulation-v1 h2 { margin: 0 0 0.75rem; }
+    #flywire-connectome-simulation-v1 > .form-label { max-width: 30rem; }
+    #flywire-connectome-simulation-v1 .nav { margin: 0.5rem 0; }
+    #flywire-connectome-simulation-v1 .viz-controls { align-items: end; }
+    #flywire-connectome-simulation-v1 .viz-controls > .form-label { min-width: 10rem; }
+    #flywire-connectome-simulation-v1 .sim-actions { align-items: end; }
+    #flywire-connectome-simulation-v1 .sim-model-note { margin: 0.25rem 0 0.5rem; }
+    #flywire-connectome-simulation-v1 .connectome-graph { display: block; width: 100%; height: 520px; overflow: visible; }
+    #flywire-connectome-simulation-v1 .connectome-graph text { fill: var(--foreground); font-family: inherit; font-size: 12px; }
+    #flywire-connectome-simulation-v1 .connectome-graph .column-label { fill: var(--muted-foreground); }
+    #flywire-connectome-simulation-v1 .connectome-graph .edge { fill: none; stroke: var(--border); stroke-opacity: 0.9; marker-end: url(#sim-arrow); }
+    #flywire-connectome-simulation-v1 .connectome-graph .edge-active { stroke: var(--viz-series-1); stroke-opacity: 1; }
+    #flywire-connectome-simulation-v1 .connectome-graph .neuron { fill: var(--muted); stroke: var(--border); stroke-width: 1.5px; }
+    #flywire-connectome-simulation-v1 .connectome-graph .neuron-center { fill: color-mix(in srgb, var(--viz-series-1) 26%, var(--background)); stroke: var(--viz-series-1); stroke-width: 2px; }
+    #flywire-connectome-simulation-v1 .connectome-graph .neuron-active { fill: color-mix(in srgb, var(--viz-series-1) 45%, var(--background)); stroke: var(--viz-series-1); stroke-width: 2.5px; }
+    #flywire-connectome-simulation-v1 .connectome-summary { margin: 0.25rem 0; }
+    #flywire-connectome-simulation-v1 .connectome-summary strong { color: var(--foreground); font-weight: 500; }
+    #flywire-connectome-simulation-v1 #sim-history { display: block; width: 100%; height: 160px; }
+    #flywire-connectome-simulation-v1 #sim-history text { fill: var(--foreground); font-family: inherit; font-size: 12px; }
+    #flywire-connectome-simulation-v1 .connectome-summary { overflow-wrap: anywhere; }
+    #flywire-connectome-simulation-v1 #sim-inspector { overflow-wrap: anywhere; }
+    #flywire-connectome-simulation-v1 .neuron-hit { display: block; width: 44px; height: 44px; padding: 0; border: 0; background: transparent; color: var(--foreground); }
+    @media (max-width: 520px) {
+      #flywire-connectome-simulation-v1 .connectome-graph { height: 440px; }
+      #flywire-connectome-simulation-v1 .viz-controls > .form-label { min-width: min(100%, 9rem); }
+    }
+  </style>
+  <script>
+    (() => {
+      const root = document.getElementById("flywire-connectome-simulation-v1");
+      const data = JSON.parse(root.querySelector("#sim-data").textContent);
+      const centerSelect = root.querySelector("#sim-center");
+      const directionSelect = root.querySelector("#sim-direction");
+      const countInput = root.querySelector("#sim-count");
+      const countValue = root.querySelector("#sim-count-value");
+      const strengthInput = root.querySelector("#sim-strength");
+      const strengthValue = root.querySelector("#sim-strength-value");
+      const thresholdInput = root.querySelector("#sim-threshold");
+      const thresholdValue = root.querySelector("#sim-threshold-value");
+      const targetSelect = root.querySelector("#sim-target");
+      const inspector = root.querySelector("#sim-inspector");
+      const nodeButtons = new Map();
+      const mapTab = root.querySelector("#sim-map-tab");
+      const modelTab = root.querySelector("#sim-model-tab");
+      const mapPanel = root.querySelector("#sim-map-panel");
+      const modelPanel = root.querySelector("#sim-model-panel");
+      const stimulateButton = root.querySelector("#sim-stimulate");
+      const stepButton = root.querySelector("#sim-step");
+      const resetButton = root.querySelector("#sim-reset");
+      const playButton = root.querySelector("#sim-play");
+      const speedSelect = root.querySelector("#sim-speed");
+      const historyPanel = root.querySelector("#sim-history-panel");
+      const historyGraph = root.querySelector("#sim-history");
+      const historyDrawing = root.querySelector("#sim-history-drawing");
+      const graph = root.querySelector(".connectome-graph");
+      const drawing = root.querySelector("#sim-drawing");
+      const summary = root.querySelector("#sim-summary");
+      const svgNS = "http://www.w3.org/2000/svg";
+      const centers = new Map(data.centers.map(center => [center.id, center]));
+      const allNodes = data.nodes;
+
+      function objectValue(value) {
+        if (typeof value === "string") {
+          try { return JSON.parse(value); } catch { return {}; }
+        }
+        return value && typeof value === "object" ? value : {};
+      }
+
+      const savedState = objectValue(window.openai?.widgetState?.privateContent);
+      const modelState = objectValue(window.openai?.widgetState?.modelContent);
+      const savedRoot = savedState.rootId || modelState.rootId;
+      let mode = (savedState.mode || modelState.mode) === "simulation" ? "simulation" : "map";
+      let simulation = { step: 0, levels: new Map(), message: "Model gotowy" };
+      const maxSteps = 20;
+      const speeds = ["0.5", "1", "2", "4"];
+      let timer = null;
+      let history = [];
+
+      const format = value => new Intl.NumberFormat("pl-PL").format(value);
+      const display = node => node?.name || node?.id || "Neuron";
+      const typeLabel = node => node?.visual || node?.nt || "typ nieopisany";
+      const threshold = () => Number(thresholdInput.value) / 100;
+
+      for (const center of data.centers) {
+        const option = document.createElement("option");
+        option.value = center.id;
+        option.textContent = `${display(center)} · ${typeLabel(center)} · ${format(center.inTotal)} / ${format(center.outTotal)}`;
+        centerSelect.append(option);
+      }
+      centerSelect.value = centers.has(savedRoot) ? savedRoot : data.centers[0]?.id;
+      if (["both", "in", "out"].includes(savedState.direction)) directionSelect.value = savedState.direction;
+      if (Number.isFinite(savedState.count)) countInput.value = String(Math.max(4, Math.min(12, savedState.count)));
+      if (Number.isFinite(savedState.strength)) strengthInput.value = String(Math.max(20, Math.min(100, savedState.strength)));
+      if (Number.isFinite(savedState.threshold)) thresholdInput.value = String(Math.max(20, Math.min(90, savedState.threshold)));
+      if (speeds.includes(savedState.speed)) speedSelect.value = savedState.speed;
+      let inspectedId = centerSelect.value;
+      populateTargets(savedState.sourceId || modelState.sourceId);
+      if (mode === "simulation") inspectedId = targetSelect.value;
+
+      function populateTargets(preferredId) {
+        const center = centers.get(centerSelect.value);
+        targetSelect.replaceChildren();
+        for (const id of center.simNodes) {
+          const option = document.createElement("option");
+          option.value = id;
+          option.textContent = `${display(allNodes[id])} · ${id}`;
+          targetSelect.append(option);
+        }
+        targetSelect.value = center.simNodes.includes(preferredId) ? preferredId : center.id;
+      }
+
+      function selectNode(id) {
+        inspectedId = id;
+        if (mode === "simulation" && targetSelect.value !== id) {
+          targetSelect.value = id;
+          clearSimulation("Zmieniono neuron pobudzany");
+        } else render();
+        nodeButtons.get(id)?.focus();
+        saveState();
+      }
+
+      function renderInspector(center) {
+        const node = allNodes[inspectedId] || center;
+        let detail = `${display(node)} · ID ${node.id} · neuroprzekaźnik (predykcja): ${node.nt || "?"}`;
+        if (node.visual) detail += ` · typ: ${node.visual}`;
+        if (mode === "simulation") {
+          const incoming = center.simEdges.filter(edge => edge[1] === node.id);
+          const outgoing = center.simEdges.filter(edge => edge[0] === node.id);
+          detail += ` · w podgrafie: ${incoming.length} wejść, ${outgoing.length} wyjść`;
+        }
+        if (inspector.textContent !== detail) inspector.textContent = detail;
+      }
+
+      function svgElement(name, attrs = {}) {
+        const element = document.createElementNS(svgNS, name);
+        for (const [key, value] of Object.entries(attrs)) element.setAttribute(key, String(value));
+        return element;
+      }
+
+      function addText(parent, value, x, y, className, anchor = "start") {
+        const text = svgElement("text", { x, y, "text-anchor": anchor, class: className });
+        text.textContent = value;
+        parent.append(text);
+        return text;
+      }
+
+      function addNode(parent, node, x, y, anchor, isCenter, maxChars, level = 0) {
+        const active = level >= threshold() && level > 0;
+        const suffix = active ? ` ${Math.round(level * 100)}%` : "";
+        const nameLimit = Math.max(4, maxChars - suffix.length);
+        const fullName = display(node);
+        const clipped = fullName.length > nameLimit ? `${fullName.slice(0, nameLimit - 1)}…` : fullName;
+        const group = svgElement("g");
+        const radius = active ? (isCenter ? 17 : 11) : (isCenter ? 13 : 8);
+        const classes = ["neuron", isCenter ? "neuron-center" : "", active ? "neuron-active" : ""].filter(Boolean).join(" ");
+        const circle = svgElement("circle", { cx: x, cy: y, r: radius, class: classes });
+        const modelDetail = level > 0 ? ` · aktywacja ${Math.round(level * 100)}%` : "";
+        circle.setAttribute("data-tooltip", `${fullName} · ${typeLabel(node)} · ID ${node.id}${modelDetail}`);
+        group.append(circle);
+        if (mode === "simulation" && node.id === targetSelect.value) {
+          group.append(svgElement("circle", { cx: x, cy: y, r: 21, fill: "none", stroke: "var(--foreground)", "stroke-dasharray": "3 3", "aria-hidden": "true" }));
+        }
+        if (isCenter) {
+          addText(group, `${clipped}${suffix}`, x, y + 31, "node-label", "middle");
+          addText(group, typeLabel(node), x, y + 47, "column-label", "middle");
+        } else {
+          const labelX = x + (anchor === "start" ? 14 : -14);
+          addText(group, `${clipped}${suffix}`, labelX, y + 4, "node-label", anchor);
+        }
+        const hitArea = svgElement("foreignObject", {x: x - 22, y: y - 22, width: 44, height: 44});
+        const button = document.createElement("button");
+        button.type = "button";
+        button.className = "neuron-hit cursor-interaction";
+        button.setAttribute("aria-label", `${mode === "simulation" ? "Wybierz do pobudzenia" : "Szczegóły neuronu"}: ${fullName}, ID ${node.id}`);
+        button.setAttribute("data-neuron-id", node.id);
+        button.setAttribute("data-tooltip", `${fullName} · ${typeLabel(node)} · ID ${node.id}${modelDetail}`);
+        if (mode === "simulation") button.setAttribute("aria-pressed", String(node.id === targetSelect.value));
+        button.addEventListener("click", () => selectNode(node.id));
+        hitArea.append(button);
+        group.append(hitArea);
+        if (!nodeButtons.has(node.id)) nodeButtons.set(node.id, button);
+        parent.append(group);
+      }
+
+      function addEdge(parent, sourceId, targetId, weight, start, end, maxWeight, active) {
+        const dx = end.x - start.x;
+        const dy = end.y - start.y;
+        const distance = Math.max(1, Math.hypot(dx, dy));
+        const startRadius = sourceId === centerSelect.value ? 17 : 10;
+        const endRadius = targetId === centerSelect.value ? 20 : 13;
+        const line = svgElement("line", {
+          x1: start.x + dx / distance * startRadius,
+          y1: start.y + dy / distance * startRadius,
+          x2: end.x - dx / distance * endRadius,
+          y2: end.y - dy / distance * endRadius,
+          class: active ? "edge edge-active" : "edge",
+        });
+        line.style.strokeWidth = `${1 + 4 * Math.sqrt(weight / maxWeight)}px`;
+        const source = allNodes[sourceId];
+        const target = allNodes[targetId];
+        line.setAttribute("data-tooltip", `${display(source)} → ${display(target)} · ${format(weight)} synaps`);
+        parent.append(line);
+      }
+
+      function updateTabs() {
+        const mapSelected = mode === "map";
+        mapTab.classList.toggle("active", mapSelected);
+        modelTab.classList.toggle("active", !mapSelected);
+        mapTab.setAttribute("aria-selected", String(mapSelected));
+        modelTab.setAttribute("aria-selected", String(!mapSelected));
+        mapPanel.hidden = !mapSelected;
+        modelPanel.hidden = mapSelected;
+        historyPanel.hidden = mapSelected;
+      }
+
+      function mapSummary(center, incoming, outgoing) {
+        const items = [
+          ["Neuron", display(center)],
+          ["Typ", typeLabel(center)],
+          ["Widoczne wejścia", format(incoming.reduce((sum, edge) => sum + edge[1], 0))],
+          ["Widoczne wyjścia", format(outgoing.reduce((sum, edge) => sum + edge[1], 0))],
+          ["ID", center.id],
+        ];
+        summary.replaceChildren();
+        for (const [label, value] of items) {
+          const item = document.createElement("span");
+          const strong = document.createElement("strong");
+          strong.textContent = `${label}: `;
+          item.append(strong, document.createTextNode(value));
+          summary.append(item);
+        }
+      }
+
+      function drawMap(center, width, height) {
+        const count = Math.min(Number(countInput.value), width < 520 ? 8 : 12);
+        countValue.textContent = String(count);
+        const leftX = width * 0.27;
+        const centerX = width * 0.5;
+        const rightX = width * 0.73;
+        const centerY = height * 0.52;
+        const incoming = directionSelect.value === "out" ? [] : center.inEdges.slice(0, count);
+        const outgoing = directionSelect.value === "in" ? [] : center.outEdges.slice(0, count);
+        const allEdges = [...incoming.map(edge => [edge[0], center.id, edge[1]]), ...outgoing.map(edge => [center.id, edge[0], edge[1]])];
+        const maxWeight = Math.max(1, ...allEdges.map(edge => edge[2]));
+        const top = 48;
+        const bottom = height - 26;
+        const rowY = (index, length) => length <= 1 ? centerY : top + index * (bottom - top) / (length - 1);
+
+        addText(drawing, "WEJŚCIA", leftX, 22, "column-label", "middle");
+        addText(drawing, "NEURON", centerX, 22, "column-label", "middle");
+        addText(drawing, "WYJŚCIA", rightX, 22, "column-label", "middle");
+        incoming.forEach((edge, index) => addEdge(drawing, edge[0], center.id, edge[1], { x: leftX, y: rowY(index, incoming.length) }, { x: centerX, y: centerY }, maxWeight, false));
+        outgoing.forEach((edge, index) => addEdge(drawing, center.id, edge[0], edge[1], { x: centerX, y: centerY }, { x: rightX, y: rowY(index, outgoing.length) }, maxWeight, false));
+        incoming.forEach((edge, index) => addNode(drawing, allNodes[edge[0]], leftX, rowY(index, incoming.length), "end", false, Math.max(6, Math.floor((leftX - 24) / 7)), simulation.levels.get(edge[0]) || 0));
+        outgoing.forEach((edge, index) => addNode(drawing, allNodes[edge[0]], rightX, rowY(index, outgoing.length), "start", false, Math.max(6, Math.floor((width - rightX - 24) / 7)), simulation.levels.get(edge[0]) || 0));
+        addNode(drawing, center, centerX, centerY, "middle", true, Math.max(8, Math.floor(width * 0.34 / 7)), simulation.levels.get(center.id) || 0);
+        mapSummary(center, incoming, outgoing);
+      }
+
+      function drawSimulation(center, width, height) {
+        const ids = center.simNodes || [center.id];
+        const positions = new Map();
+        const centerX = width * 0.17;
+        const centerY = height * 0.52;
+        positions.set(center.id, { x: centerX, y: centerY });
+        const partners = ids.filter(id => id !== center.id);
+        const columns = width >= 560 ? 2 : 1;
+        const rows = Math.ceil(partners.length / columns);
+        const top = 52;
+        const bottom = height - 26;
+        partners.forEach((id, index) => {
+          const column = Math.floor(index / rows);
+          const row = index % rows;
+          const x = columns === 1 ? width * 0.7 : (column === 0 ? width * 0.52 : width * 0.82);
+          const y = rows <= 1 ? centerY : top + row * (bottom - top) / (rows - 1);
+          positions.set(id, { x, y });
+        });
+
+        addText(drawing, "CENTRUM", centerX, 22, "column-label", "middle");
+        addText(drawing, "PODGRAF", width * 0.68, 22, "column-label", "middle");
+        const edges = center.simEdges || [];
+        const maxWeight = Math.max(1, ...edges.map(edge => edge[2]));
+        for (const [pre, post, weight] of edges) {
+          const start = positions.get(pre);
+          const end = positions.get(post);
+          if (!start || !end) continue;
+          const active = (simulation.levels.get(pre) || 0) >= threshold();
+          addEdge(drawing, pre, post, weight, start, end, maxWeight, active);
+        }
+        for (const id of ids) {
+          const position = positions.get(id);
+          const node = allNodes[id] || { id, name: id, nt: "?" };
+          const level = simulation.levels.get(id) || 0;
+          if (id === center.id) {
+            addNode(drawing, node, position.x, position.y, "middle", true, Math.max(8, Math.floor(width * 0.25 / 7)), level);
+          } else {
+            const labelBoundary = columns === 2 && position.x < width * 0.7 ? width * 0.82 - 16 : width;
+            addNode(drawing, node, position.x, position.y, "start", false, Math.max(6, Math.floor((labelBoundary - position.x - 24) / 7)), level);
+          }
+        }
+        summary.textContent = simulation.message;
+      }
+
+      function drawHistory(center, width) {
+        historyGraph.setAttribute("viewBox", `0 0 ${width} 160`);
+        historyDrawing.replaceChildren();
+        const left = 42;
+        const right = width - 12;
+        const top = 34;
+        const bottom = 116;
+        const total = Math.max(1, center.simNodes.length);
+        const slot = (right - left) / (maxSteps + 1);
+        addText(historyDrawing, "Aktywne neurony", left, 16, "axis-title");
+        addText(historyDrawing, String(total), left - 8, top + 4, "", "end");
+        addText(historyDrawing, "0", left - 8, bottom + 4, "", "end");
+        historyDrawing.append(svgElement("line", {x1: left, x2: right, y1: bottom, y2: bottom, stroke: "var(--border)"}));
+        for (let step = 0; step <= maxSteps; step += 5) {
+          addText(historyDrawing, String(step), left + (step + 0.5) * slot, bottom + 18, "", "middle");
+        }
+        addText(historyDrawing, "Krok", right, 154, "axis-title", "end");
+        history.forEach((count, step) => {
+          const barHeight = count / total * (bottom - top);
+          const bar = svgElement("rect", {
+            x: left + step * slot + 1, y: bottom - barHeight,
+            width: Math.max(1, slot - 2), height: barHeight,
+            fill: "var(--viz-series-1)", opacity: step === simulation.step ? 1 : 0.45,
+            "data-tooltip": `Krok ${step}: ${count} / ${total} aktywnych neuronów`,
+          });
+          historyDrawing.append(bar);
+        });
+        root.querySelector("#sim-history-title").textContent = history.length
+          ? `Aktywne neurony, kroki 0–${simulation.step}: ${history.join(", ")}`
+          : "Liczba aktywnych neuronów w kolejnych krokach; brak pobudzenia";
+      }
+
+      function pause() {
+        if (timer !== null) clearInterval(timer);
+        timer = null;
+      }
+
+      function startPlayback() {
+        if (timer !== null || !simulation.levels.size || simulation.step >= maxSteps || mode !== "simulation") return;
+        timer = setInterval(() => {
+          if (!root.isConnected || document.hidden) { pause(); render(); return; }
+          advance();
+        }, 1000 / Number(speedSelect.value));
+        render();
+      }
+
+      function render() {
+        const focusedNode = document.activeElement?.getAttribute?.("data-neuron-id");
+        const center = centers.get(centerSelect.value);
+        if (!center) return;
+        const width = Math.max(320, Math.round(root.getBoundingClientRect().width));
+        graph.style.height = mode === "simulation" && width < 560 ? "640px" : width <= 520 ? "440px" : "520px";
+        const height = graph.getBoundingClientRect().height || 520;
+        graph.setAttribute("viewBox", `0 0 ${width} ${height}`);
+        drawing.replaceChildren();
+        nodeButtons.clear();
+        if (mode === "map") drawMap(center, width, height);
+        else { drawSimulation(center, width, height); drawHistory(center, width); }
+        renderInspector(center);
+        const finished = simulation.levels.size === 0 || simulation.step >= maxSteps;
+        stepButton.disabled = finished || timer !== null;
+        playButton.disabled = finished;
+        playButton.setAttribute("aria-pressed", String(timer !== null));
+        root.querySelector("#sim-play-label").textContent = timer === null ? "Start" : "Pauza";
+        root.querySelector("#sim-play-icon").hidden = timer !== null;
+        root.querySelector("#sim-pause-icon").hidden = timer === null;
+        resetButton.disabled = simulation.step === 0 && simulation.levels.size === 0;
+        if (focusedNode) nodeButtons.get(focusedNode)?.focus();
+      }
+
+      function saveState() {
+        window.openai?.setWidgetState?.({
+          modelContent: { rootId: centerSelect.value, sourceId: targetSelect.value, inspectedId, mode },
+          privateContent: {
+            rootId: centerSelect.value,
+            mode,
+            direction: directionSelect.value,
+            count: Number(countInput.value),
+            strength: Number(strengthInput.value),
+            threshold: Number(thresholdInput.value),
+            speed: speedSelect.value,
+            sourceId: targetSelect.value,
+          },
+        })?.catch?.(() => {});
+      }
+
+      function clearSimulation(message = "Model gotowy") {
+        pause();
+        history = [];
+        simulation = { step: 0, levels: new Map(), message };
+        render();
+      }
+
+      function stimulate() {
+        pause();
+        const center = centers.get(centerSelect.value);
+        const strength = Number(strengthInput.value) / 100;
+        if (strength < threshold()) {
+          clearSimulation("Bodziec poniżej progu");
+          return;
+        }
+        const sourceId = center.simNodes.includes(targetSelect.value) ? targetSelect.value : center.id;
+        inspectedId = sourceId;
+        simulation = { step: 0, levels: new Map([[sourceId, strength]]), message: "Krok 0 · 1 aktywny neuron" };
+        history = [1];
+        render();
+      }
+
+      function advance() {
+        if (!simulation.levels.size || simulation.step >= maxSteps) { pause(); render(); return; }
+        const center = centers.get(centerSelect.value);
+        const edges = center.simEdges || [];
+        const drive = new Map();
+        const sourceMax = new Map();
+        for (const [pre, , weight] of edges) sourceMax.set(pre, Math.max(sourceMax.get(pre) || 0, weight));
+        for (const [pre, post, weight] of edges) {
+          const sourceLevel = simulation.levels.get(pre) || 0;
+          if (sourceLevel > 0) drive.set(post, (drive.get(post) || 0) + sourceLevel * weight / sourceMax.get(pre));
+        }
+        const next = new Map();
+        for (const id of center.simNodes || [center.id]) {
+          const level = Math.min(1, (simulation.levels.get(id) || 0) * 0.35 + (drive.get(id) || 0));
+          if (level >= threshold() && level > 0) next.set(id, level);
+        }
+        const step = simulation.step + 1;
+        const activeCount = next.size;
+        simulation = {
+          step,
+          levels: next,
+          message: activeCount ? `Krok ${step} · ${activeCount} aktywnych neuronów` : `Krok ${step} · sygnał wygasł`,
+        };
+        history.push(activeCount);
+        if (!activeCount || step >= maxSteps) pause();
+        if (activeCount && step >= maxSteps) simulation.message += " · koniec przebiegu";
+        render();
+      }
+
+      function setMode(nextMode, persist = true) {
+        if (nextMode !== "simulation") pause();
+        mode = nextMode;
+        if (mode === "simulation") inspectedId = targetSelect.value;
+        updateTabs();
+        render();
+        if (persist) saveState();
+      }
+
+      mapTab.addEventListener("click", () => setMode("map"));
+      modelTab.addEventListener("click", () => setMode("simulation"));
+      centerSelect.addEventListener("change", () => {
+        populateTargets();
+        inspectedId = centerSelect.value;
+        clearSimulation("Model gotowy");
+        saveState();
+      });
+      targetSelect.addEventListener("change", () => {
+        if (!centers.get(centerSelect.value).simNodes.includes(targetSelect.value)) targetSelect.value = centerSelect.value;
+        inspectedId = targetSelect.value;
+        clearSimulation("Zmieniono neuron pobudzany");
+        saveState();
+      });
+      directionSelect.addEventListener("change", () => { render(); saveState(); });
+      countInput.addEventListener("input", () => { render(); saveState(); });
+      strengthInput.addEventListener("input", () => {
+        strengthValue.textContent = `${strengthInput.value}%`;
+        clearSimulation("Parametry zmienione");
+        saveState();
+      });
+      thresholdInput.addEventListener("input", () => {
+        thresholdValue.textContent = `${thresholdInput.value}%`;
+        clearSimulation("Parametry zmienione");
+        saveState();
+      });
+      stimulateButton.addEventListener("click", () => { stimulate(); saveState(); });
+      stepButton.addEventListener("click", advance);
+      playButton.addEventListener("click", () => {
+        if (timer === null) startPlayback();
+        else { pause(); render(); }
+      });
+      speedSelect.addEventListener("change", () => {
+        const running = timer !== null;
+        pause();
+        if (running) startPlayback();
+        saveState();
+      });
+      document.addEventListener("visibilitychange", () => { if (document.hidden) { pause(); render(); } });
+      window.addEventListener("pagehide", pause);
+      resetButton.addEventListener("click", () => { clearSimulation(); saveState(); });
+      window.addEventListener("openai:set_globals", event => {
+        if (!event.detail?.globals?.widgetState) return;
+        const previousRoot = centerSelect.value;
+        const previous = [centerSelect.value, strengthInput.value, thresholdInput.value, targetSelect.value].join("|");
+        const previousSpeed = speedSelect.value;
+        const incomingState = objectValue(event.detail?.globals?.widgetState?.privateContent);
+        const incomingModel = objectValue(event.detail?.globals?.widgetState?.modelContent);
+        const rootId = incomingState.rootId || incomingModel.rootId;
+        if (centers.has(rootId)) centerSelect.value = rootId;
+        const sourceId = incomingState.sourceId || incomingModel.sourceId;
+        if (centerSelect.value !== previousRoot) {
+          populateTargets(sourceId);
+          inspectedId = centerSelect.value;
+        } else if (centers.get(centerSelect.value).simNodes.includes(sourceId)) targetSelect.value = sourceId;
+        const incomingMode = incomingState.mode || incomingModel.mode;
+        if (["map", "simulation"].includes(incomingMode)) mode = incomingMode;
+        if (["both", "in", "out"].includes(incomingState.direction)) directionSelect.value = incomingState.direction;
+        if (Number.isFinite(incomingState.count)) countInput.value = String(Math.max(4, Math.min(12, incomingState.count)));
+        if (Number.isFinite(incomingState.strength)) strengthInput.value = String(Math.max(20, Math.min(100, incomingState.strength)));
+        if (Number.isFinite(incomingState.threshold)) thresholdInput.value = String(Math.max(20, Math.min(90, incomingState.threshold)));
+        if (speeds.includes(incomingState.speed)) speedSelect.value = incomingState.speed;
+        strengthValue.textContent = `${strengthInput.value}%`;
+        thresholdValue.textContent = `${thresholdInput.value}%`;
+        const changed = previous !== [centerSelect.value, strengthInput.value, thresholdInput.value, targetSelect.value].join("|");
+        if (changed && mode === "simulation") inspectedId = targetSelect.value;
+        if (changed) clearSimulation("Model gotowy");
+        else if (mode !== "simulation" || previousSpeed !== speedSelect.value) pause();
+        updateTabs();
+        render();
+      });
+
+      strengthValue.textContent = `${strengthInput.value}%`;
+      thresholdValue.textContent = `${thresholdInput.value}%`;
+      updateTabs();
+      new ResizeObserver(render).observe(root);
+      render();
+    })();
+  </script>
+</div>

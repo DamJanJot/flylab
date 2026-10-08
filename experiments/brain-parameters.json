@@ -1,0 +1,11 @@
+{
+  "rest_v": -0.052,
+  "reset_v": -0.052,
+  "threshold_v": -0.045,
+  "membrane_tau_s": 0.02,
+  "synapse_tau_s": 0.005,
+  "refractory_s": 0.0022,
+  "delay_s": 0.0018,
+  "weight_per_contact_v": 0.000275,
+  "input_kick_v": 0.06875
+}

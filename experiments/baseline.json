@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "experiment_id": "baseline",
+  "seed": 42,
+  "duration_s": 0.25,
+  "physics_dt_s": 0.0001,
+  "brain_dt_s": 0.0001,
+  "control_dt_s": 0.001,
+  "body_engine": "flygym",
+  "brain_engine": "brian2",
+  "graph_center_id": "720575940626979621",
+  "interventions": []
+}

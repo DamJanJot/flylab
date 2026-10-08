@@ -1,0 +1,27 @@
+{
+  "sensors": {
+    "schema_version": 1,
+    "experiment_id": "closed-loop-steering",
+    "seed": 42,
+    "duration_s": 0.6,
+    "physics_dt_s": 0.0001,
+    "sensory_dt_s": 0.01,
+    "brain_dt_s": 0.0001,
+    "warmup_s": 0.05,
+    "encoder": {
+      "maximum_rate_hz": 200.0,
+      "angle_scale_rad": 0.5,
+      "velocity_scale_rad_s": 50.0,
+      "contrast_scale_per_s": 10.0
+    }
+  },
+  "coupling": {
+    "baseline_input_hz": 20.0,
+    "visual_gain_hz": 180.0,
+    "contrast_scale": 0.15,
+    "input_quantum_hz": 1.0,
+    "filter_tau_s": 0.04,
+    "steering_scale_hz": 100.0,
+    "maximum_stride_reduction": 0.65
+  }
+}

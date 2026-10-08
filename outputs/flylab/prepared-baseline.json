@@ -1,0 +1,303 @@
+{
+  "schema_version": 1,
+  "status": "prepared_not_simulated",
+  "experiment_key": "6526f19ff7c1a973",
+  "config_sha256": "2c53b4295d552ca38ae71243e3155fc8e0c8f97f4d0f3d128e1c38f2b2e55df8",
+  "graph_sha256": "2a94d55477414d7f9f0870e0e5ab0522ff8139865c0b03140669967413c498bf",
+  "config": {
+    "schema_version": 1,
+    "experiment_id": "baseline",
+    "seed": 42,
+    "duration_s": 0.25,
+    "physics_dt_s": 0.0001,
+    "brain_dt_s": 0.0001,
+    "control_dt_s": 0.001,
+    "body_engine": "flygym",
+    "brain_engine": "brian2",
+    "graph_center_id": "720575940626979621",
+    "interventions": []
+  },
+  "graph": {
+    "scope": "induced_demonstration_subgraph",
+    "complete_brain": false,
+    "source": "FlyWire FAFB v783, connections_princeton.csv.gz",
+    "center_id": "720575940626979621",
+    "nodes": [
+      {
+        "id": "720575940612370069",
+        "name": "LO.LOP.78",
+        "group": "LO.LOP",
+        "nt": "ACH",
+        "visual": "T5a",
+        "family": "T5 Neuron"
+      },
+      {
+        "id": "720575940614283935",
+        "name": "LO.LOP.1642",
+        "group": "LO.LOP",
+        "nt": "ACH",
+        "visual": "T5a",
+        "family": "T5 Neuron"
+      },
+      {
+        "id": "720575940616494865",
+        "name": "LO.LOP.1343",
+        "group": "LO.LOP",
+        "nt": "ACH",
+        "visual": "T5d",
+        "family": "T5 Neuron"
+      },
+      {
+        "id": "720575940620414794",
+        "name": "LO.LOP.1580",
+        "group": "LO.LOP",
+        "nt": "ACH",
+        "visual": "T5b",
+        "family": "T5 Neuron"
+      },
+      {
+        "id": "720575940621116807",
+        "name": "LO.12",
+        "group": "LO",
+        "nt": "GABA",
+        "visual": "LT33",
+        "family": "LT"
+      },
+      {
+        "id": "720575940621357552",
+        "name": "LO.LOP.98",
+        "group": "LO.LOP",
+        "nt": "ACH",
+        "visual": "T5a",
+        "family": "T5 Neuron"
+      },
+      {
+        "id": "720575940623372874",
+        "name": "LO.LOP.385",
+        "group": "LO.LOP",
+        "nt": "ACH",
+        "visual": "T5a",
+        "family": "T5 Neuron"
+      },
+      {
+        "id": "720575940624776892",
+        "name": "LO.LOP.489",
+        "group": "LO.LOP",
+        "nt": "ACH",
+        "visual": "T5a",
+        "family": "T5 Neuron"
+      },
+      {
+        "id": "720575940625959667",
+        "name": "IPS.LOP.6",
+        "group": "IPS.LOP",
+        "nt": "ACH",
+        "visual": "cMLLP02",
+        "family": "cMLLP"
+      },
+      {
+        "id": "720575940626979621",
+        "name": "LO.1",
+        "group": "LO",
+        "nt": "GABA",
+        "visual": "CT1",
+        "family": "Lobula Medulla Amacrine"
+      },
+      {
+        "id": "720575940631966149",
+        "name": "IPS.LO.3",
+        "group": "IPS.LO",
+        "nt": "ACH",
+        "visual": "cMLLP02",
+        "family": "cMLLP"
+      },
+      {
+        "id": "720575940634970743",
+        "name": "LO.LOP.2690",
+        "group": "LO.LOP",
+        "nt": "ACH",
+        "visual": "T5b",
+        "family": "T5 Neuron"
+      },
+      {
+        "id": "720575940637721919",
+        "name": "LO.LOP.1719",
+        "group": "LO.LOP",
+        "nt": "ACH",
+        "visual": "T5a",
+        "family": "T5 Neuron"
+      }
+    ],
+    "edges": [
+      {
+        "source": "720575940612370069",
+        "target": "720575940621116807",
+        "synapse_count": 7
+      },
+      {
+        "source": "720575940612370069",
+        "target": "720575940626979621",
+        "synapse_count": 8
+      },
+      {
+        "source": "720575940620414794",
+        "target": "720575940621116807",
+        "synapse_count": 10
+      },
+      {
+        "source": "720575940620414794",
+        "target": "720575940626979621",
+        "synapse_count": 8
+      },
+      {
+        "source": "720575940621116807",
+        "target": "720575940612370069",
+        "synapse_count": 7
+      },
+      {
+        "source": "720575940621116807",
+        "target": "720575940616494865",
+        "synapse_count": 6
+      },
+      {
+        "source": "720575940621116807",
+        "target": "720575940621357552",
+        "synapse_count": 11
+      },
+      {
+        "source": "720575940621116807",
+        "target": "720575940623372874",
+        "synapse_count": 9
+      },
+      {
+        "source": "720575940621116807",
+        "target": "720575940626979621",
+        "synapse_count": 230
+      },
+      {
+        "source": "720575940621116807",
+        "target": "720575940637721919",
+        "synapse_count": 5
+      },
+      {
+        "source": "720575940621357552",
+        "target": "720575940626979621",
+        "synapse_count": 8
+      },
+      {
+        "source": "720575940623372874",
+        "target": "720575940626979621",
+        "synapse_count": 8
+      },
+      {
+        "source": "720575940625959667",
+        "target": "720575940621116807",
+        "synapse_count": 221
+      },
+      {
+        "source": "720575940625959667",
+        "target": "720575940626979621",
+        "synapse_count": 1113
+      },
+      {
+        "source": "720575940625959667",
+        "target": "720575940631966149",
+        "synapse_count": 9
+      },
+      {
+        "source": "720575940626979621",
+        "target": "720575940612370069",
+        "synapse_count": 47
+      },
+      {
+        "source": "720575940626979621",
+        "target": "720575940614283935",
+        "synapse_count": 46
+      },
+      {
+        "source": "720575940626979621",
+        "target": "720575940616494865",
+        "synapse_count": 46
+      },
+      {
+        "source": "720575940626979621",
+        "target": "720575940620414794",
+        "synapse_count": 43
+      },
+      {
+        "source": "720575940626979621",
+        "target": "720575940621116807",
+        "synapse_count": 736
+      },
+      {
+        "source": "720575940626979621",
+        "target": "720575940621357552",
+        "synapse_count": 45
+      },
+      {
+        "source": "720575940626979621",
+        "target": "720575940623372874",
+        "synapse_count": 43
+      },
+      {
+        "source": "720575940626979621",
+        "target": "720575940624776892",
+        "synapse_count": 42
+      },
+      {
+        "source": "720575940626979621",
+        "target": "720575940625959667",
+        "synapse_count": 51
+      },
+      {
+        "source": "720575940626979621",
+        "target": "720575940631966149",
+        "synapse_count": 48
+      },
+      {
+        "source": "720575940626979621",
+        "target": "720575940634970743",
+        "synapse_count": 46
+      },
+      {
+        "source": "720575940626979621",
+        "target": "720575940637721919",
+        "synapse_count": 42
+      },
+      {
+        "source": "720575940631966149",
+        "target": "720575940621116807",
+        "synapse_count": 195
+      },
+      {
+        "source": "720575940631966149",
+        "target": "720575940625959667",
+        "synapse_count": 22
+      },
+      {
+        "source": "720575940631966149",
+        "target": "720575940626979621",
+        "synapse_count": 794
+      },
+      {
+        "source": "720575940634970743",
+        "target": "720575940621116807",
+        "synapse_count": 5
+      },
+      {
+        "source": "720575940634970743",
+        "target": "720575940626979621",
+        "synapse_count": 8
+      },
+      {
+        "source": "720575940637721919",
+        "target": "720575940626979621",
+        "synapse_count": 7
+      }
+    ],
+    "weight_semantics": "synapse_count_not_calibrated_conductance",
+    "sensory_mapping": null,
+    "motor_mapping": null
+  },
+  "results": null
+}

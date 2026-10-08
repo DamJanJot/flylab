@@ -1,0 +1,40 @@
+{
+  "schema_version": 1,
+  "simulation": {
+    "sensors": {
+      "schema_version": 1,
+      "experiment_id": "behavior-stage6",
+      "seed": 42,
+      "duration_s": 0.8,
+      "physics_dt_s": 0.0001,
+      "sensory_dt_s": 0.01,
+      "brain_dt_s": 0.0001,
+      "warmup_s": 0.05,
+      "encoder": {
+        "maximum_rate_hz": 200.0,
+        "angle_scale_rad": 0.5,
+        "velocity_scale_rad_s": 50.0,
+        "contrast_scale_per_s": 10.0
+      }
+    },
+    "coupling": {
+      "baseline_input_hz": 20.0,
+      "visual_gain_hz": 180.0,
+      "contrast_scale": 0.15,
+      "input_quantum_hz": 1.0,
+      "filter_tau_s": 0.04,
+      "steering_scale_hz": 100.0,
+      "maximum_stride_reduction": 0.65
+    }
+  },
+  "seeds": [42, 43, 44],
+  "scenarios": ["neutral", "left", "right", "obstacle"],
+  "conditions": ["connected", "disconnected", "silenced"],
+  "stimulations": ["stimulate_left", "stimulate_right"],
+  "cue_start_s": 0.1,
+  "intervention_start_s": 0.2,
+  "intervention_end_s": 0.6,
+  "stimulation_hz": 150.0,
+  "obstacle": {"center_mm": [5.0, 0.0, 0.15], "half_size_mm": [0.4, 2.0, 0.15]},
+  "outcome": {"gate_x_mm": 6.5, "corridor_half_width_mm": 3.0, "upright_min_z": 0.5, "direction_threshold_deg": 5.0}
+}
