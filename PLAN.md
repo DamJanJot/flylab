@@ -17,7 +17,7 @@ nie ma jeszcze biomechaniki, pomiaru aktywnosci biologicznej ani petli sensorycz
 | 5. Polaczenie mozg-cialo | Adapter sygnalow zstepujacych i kontroler obwodow ruchowych | Zamknieta petla; interwencja w modelu mozgu zmienia komende i ruch; kontrola z odlaczonym mozgiem | Zakonczony technicznie 2026-10-08; 4-komorkowy obwod sterowania, zastepczy wzrok i VNC |
 | 6. Testy zachowania | Arena z przeszkodami, kierunkowe bodzce, pobudzenie/wyciszenie neuronow | Powtarzalne serie wielu seedow; porownanie baseline z interwencja i kontrolami | Zakonczony technicznie 2026-10-08; 44 proby, 3 seedy; przejscie przeszkody pozostaje ograniczeniem modelu |
 | 7. Panel laboratoryjny | Cialo, sygnaly sensoryczne, aktywnosc neuronow i os czasu obok siebie | Start/pauza/reset, konfiguracja testu, odtwarzanie zapisu; zgodne zegary i jednostki | Zakonczony technicznie 2026-10-08; lokalny panel, odtwarzanie i nowe proby offline |
-| 8. Walidacja i wydajnosc | Benchmark, kalibracja, testy ablacji, dokumentacja ograniczen | Odtwarzalny pakiet eksperymentu; zmierzona szybkosc i pamiec; rozdzielenie wplywu mozgu od kontrolera ruchu | W trakcie weryfikacji: protokol 68 prob i panel wdrozone; szczegoly w VALIDATION.md |
+| 8. Walidacja i wydajnosc | Benchmark, kalibracja, testy ablacji, dokumentacja ograniczen | Odtwarzalny pakiet eksperymentu; zmierzona szybkosc i pamiec; rozdzielenie wplywu mozgu od kontrolera ruchu | Zakonczony technicznie 2026-10-09; 68 prob, kalibracja inzynierska, ablacje i benchmark; biologiczna walidacja pozostaje otwarta |
 
 ## Decyzje techniczne
 
@@ -68,8 +68,8 @@ nie dowodza, ze ich import, renderer OpenGL lub modele ciala dzialaja.
 - Publikacja modelu: https://pmc.ncbi.nlm.nih.gov/articles/PMC11446845/
 - Dane FlyWire v783: https://zenodo.org/records/10676866
 
-Nastepna bramka: etap 8, walidacja i wydajnosc, kalibracja oraz ablacje
-rozdzielajace wplyw obwodu neuronowego od niezaleznego kontrolera chodu.
+Osiem etapow technicznych zakonczono. Dalsza bramka naukowa to niezalezne
+dane biologiczne i kalibracja receptorow, komorek oraz obwodow ruchowych.
 RAM zmierzony przez psutil: 34 183 331 840 B (okolo 31.8 GiB). GPU nie byl wymagany;
 benchmark etapu 3 korzysta z CPU. Wczesniejszy odczyt RAM/GPU przez CIM nie powiodl sie.
 
@@ -366,4 +366,38 @@ Uruchomienie: `Uruchom-FlyLab.cmd` lub
 
 Granica: nowe obliczenia sa offline, z postepem i odtwarzaniem po zakonczeniu,
 nie strumieniem na zywo. Panel nie jest biologiczna walidacja obwodu i nie
-dodaje calego mozgu, VNC ani lotu. Etap 8 pozostaje otwarty.
+dodaje calego mozgu, VNC ani lotu. W chwili zamkniecia etapu 7 etap 8 pozostawal otwarty.
+
+## Wynik etapu 8
+
+- 68 prob: 18 doboru parametru i 50 walidacyjnych/ablacyjnych z powtorzeniami.
+  Seedy treningowe 101-102 i walidacyjne 201-203 sa rozlaczne. Wybor zamrozono
+  przed walidacja. Domyslny profil i wczesniejsze archiwa pozostaly bez zmian.
+- Sposrod redukcji kroku 0.35, 0.50, 0.65 wybrano 0.35. Sredni koszt
+  predefiniowanego celu +/-30 stopni na nowych seedach spadl z 34.03 do 4.88
+  deg-eq. To wynik zadania inzynierskiego, nie kalibracja biologiczna.
+- Ablacje wyjscia, neuronow, wszystkich synaps, modulacji wzrokowej i dwoch
+  polaczen zwrotnych rozdzielaja ich wplyw od niezaleznego kontrolera CPG.
+  Odlaczenie wyjscia, wyciszenie DNa02 i usuniecie synaps daja identyczne qpos
+  dla tego samego seeda. Po usunieciu modulacji wzrokowej strona panelu nie
+  zmienia dynamiki. Wszystkie proby pozostaja w raporcie; nie odnotowano upadkow.
+- Dwa powtorzenia: identyczne qpos, impulsy, wejscia, napiecia i komendy.
+  Maksymalna roznica retiny 0.00006791, ponizej 1/255.
+- Mediana calkowitego czasu swiezego pracownika: 21.15 s na 0.8 s modelu,
+  czyli 26.44 s na 1 s symulacji. Maksymalna probkowana suma RSS drzewa
+  pracownika okolo 507 MiB. Pomiar obejmuje importy, przygotowanie i eksport;
+  nie obejmuje procesu nadrzednego ani GPU i zalezy od obciazenia komputera.
+- Oddzielny benchmark 139 255 neuronow i 3 732 460 par: 50 ms modelu,
+  725 impulsow, okolo 3.18 s Brian2 z kompilacja. Powtorzenie identyczne,
+  kontrola bez bodzca bez impulsow. Szczyt probkowanego RSS calego pracownika
+  zestawu neuronowego okolo 564 MiB. Pelny graf nie jest polaczony z cialem.
+- 79 testow automatycznych, 790 kontroli prob, 22 kontrole serii i 11 kontroli
+  benchmarku przeszlo. Zweryfikowano 340 artefaktow prob oraz hashe raportu,
+  wykresow, danych wejsciowych i benchmarku. Wznowienie zachowalo ukonczone proby.
+- Panel zawiera widok Walidacja z raportem i wykresami; publikowane podsumowanie
+  nie zawiera lokalnych sciezek ani surowych wielkich zbiorow danych.
+
+Instrukcja i protokol: `VALIDATION.md`. Pelne zapisy lokalne:
+`outputs/flylab/validation-stage8/`. Podsumowanie w repozytorium:
+`docs/validation-stage8.json`. Nadal brak biologicznego VNC, wechu, lotu,
+pelnego mozgu w petli i potwierdzenia zgodnosci z zachowaniem zywego zwierzecia.

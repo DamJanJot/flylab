@@ -5,6 +5,50 @@ sily zastepczego adaptera ruchowego do zadania inzynierskiego. Nie dopasowujemy
 parametrow neuronow do nieposiadanych pomiarow biologicznych i nie nazywamy
 czterokomorkowej petli symulacja calego mozgu.
 
+## Wynik z 2026-10-09
+
+**Status: zakonczony technicznie.** Wszystkie 68 prob zostalo wykonanych.
+Przeszlo 790 kontroli pojedynczych prob, 22 kontrole calej serii i 11 kontroli
+osobnego zestawu neuronowego. 79 testow automatycznych oraz `pip check` przeszlo.
+Zweryfikowano hashe 340 artefaktow prob i pozostalych plikow raportu.
+Gotowy panel sprawdzono w Chrome: cztery widoki przy szerokosciach 320, 390,
+768, 1440 i 1920 px, bez poziomego przepelnienia strony i bledow JavaScript.
+Oba wykresy sprawdzono wizualnie i pikselowo, eksport JSON porownano z raportem,
+a symulowany blad integralnosci poprawnie ukryl wyswietlane wyniki.
+
+| Miara | Wynik |
+| --- | --- |
+| Wybrana redukcja kroku | 0.35; najlepsza z trzech przetestowanych wartosci |
+| Koszt treningowy: 0.35 / 0.50 / 0.65 | 8.23 / 19.36 / 32.85 deg-eq |
+| Koszt walidacyjny: domyslny / wybrany | 34.03 / 4.88 deg-eq |
+| Seedy walidacyjne: domyslny -> wybrany | 201: 35.80 -> 4.46; 202: 32.04 -> 5.11; 203: 34.26 -> 5.08 |
+| Upadki w tej serii | 0/68; tylko arena plaska, nie test pokonywania przeszkod |
+| Dwa powtorzenia | Stan fizyczny/neuronowy identyczny; roznica retiny maks. 0.00006791 |
+| Mediana czasu pracownika | 21.15 s na 0.8 s modelu, czyli 26.44 s/s |
+| Maksymalna probkowana suma RSS pracownika | okolo 507 MiB, bez procesu nadrzednego i GPU |
+| Osobny pelny graf | 139 255 neuronow, 3 732 460 par; 50 ms modelu, 725 impulsow |
+| Czas Brian2 dla pelnego grafu | 3.18 s z kompilacja; nie obejmuje importu ani eksportu |
+| RSS pracownika zestawu neuronowego | okolo 564 MiB; nie sama alokacja grafu |
+
+Wyciszenie DNa02, odciecie wyjscia i usuniecie synaps odtwarzaja identyczna
+fizyke CPG. Bez modulacji wzrokowej lewy i prawy panel daja ten sam przebieg.
+Kontrole pokazuja wplyw modelowanego obwodu na modulacje chodu, ale nie
+potwierdzaja biologicznej poprawnosci tego obwodu.
+
+Wyniki wznowiono po przerwaniu od 32 ukonczonych prob. Pierwotny pomiar RAM,
+ktory obserwowal tylko startowy proces Windows, zachowano osobno jako
+diagnostyczny; nie jest czescia tych 68 prob. Poprawiony pomiar obejmuje
+drzewo pracownika i jest sprawdzany testem dodatkowej alokacji 64 MiB.
+Czasy sa pomiarami lokalnymi przy zmiennym obciazeniu, nie gwarancja wydajnosci.
+
+[Podsumowanie JSON](docs/validation-stage8.json) zawiera konfiguracje, wyniki
+kazdego seeda, hashe kodu i ograniczenia, bez prywatnych lokalnych sciezek.
+Pelne pliki NPZ pozostaja lokalnie i mozna je odtworzyc ponizszym protokolem.
+
+![Dobor i niezalezne seedy](docs/stage8-calibration.png)
+
+![Kontrole ablacyjne](docs/stage8-ablations.png)
+
 ## Protokol przed uruchomieniem
 
 Konfiguracja: `experiments/validation-suite.json`. Czas, fizyka, bodziec i model

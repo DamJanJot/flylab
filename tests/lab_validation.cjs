@@ -3,7 +3,7 @@ const {chromium}=require('playwright');
 const assert=require('node:assert/strict');
 const fs=require('node:fs');
 const path=require('node:path');
-const url=process.env.LAB_URL||'http://127.0.0.1:8768';
+const url=process.env.LAB_URL||'http://127.0.0.1:8767';
 const output=path.resolve('work/lab-stage8');
 
 (async()=>{
@@ -38,7 +38,8 @@ const output=path.resolve('work/lab-stage8');
         return {id,width:c.width,height:c.height,dark,colored};
       }));
       for(const plot of checks.plots){assert(plot.dark>1000);assert(plot.colored>1000);}
-      const downloaded=await (await page.request.get(await page.locator('#download-validation').getAttribute('href'))).json();
+      const downloadUrl=new URL(await page.locator('#download-validation').getAttribute('href'),url).href;
+      const downloaded=await (await page.request.get(downloadUrl)).json();
       assert.deepEqual(downloaded.summary.selection,data.summary.selection);
       checks.download_matches=true;
     } else {

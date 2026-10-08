@@ -14,7 +14,7 @@ from flylab import ROOT, write_json
 from flywire_data import Connectome, file_sha256
 from closed_loop_model import INPUT_IDS, OUTPUT_IDS
 from validation_model import Assay, training_plan, evaluation_plan, validate_config, objective, select_candidate, without_feedback
-from validation_experiment import measured_process, verified_files, run_suite
+from validation_experiment import measured_process, verified_files, run_suite, compare_results
 
 
 def configuration():
@@ -100,6 +100,30 @@ class CalibrationTests(unittest.TestCase):
         self.assertEqual(int(original.counts.sum()), 645)
         with self.assertRaises(ValueError):
             without_feedback(ablated)
+
+    def test_comparison_requires_every_assay_including_repeats(self):
+        behavior = json.loads((ROOT / "experiments/behavior-suite.json").read_text())
+        with self.assertRaisesRegex(ValueError, "incomplete"):
+            compare_results(configuration(), {"gain": .35}, behavior, {}, Path("unused"))
+
+    def test_control_comparison_detects_divergent_physics(self):
+        c = configuration()
+        behavior = json.loads((ROOT / "experiments/behavior-suite.json").read_text())
+        reports = {}
+        for a in training_plan(c) + evaluation_plan(c, .35, .65):
+            row = {**behavior_rows()[a.scenario], "forward_progress_mm": 5, "dn_spikes_left_right": [2, 3]}
+            reports[a.key] = {"assay": asdict(a), "behavior": row, "technical_status": "passed", "checks": {"fixture": True},
+                              "performance": {"sampled_peak_rss_bytes": 100, "worker_wall_s": 1}}
+        def recording(output, result):
+            arrays = {key: np.zeros(3) for key in ("qpos_native", "input_rates_hz", "spike_times_s", "spike_indices", "voltage_v", "applied_command", "ommatidia")}
+            if result["assay"]["condition"] == "no_edges":
+                arrays["qpos_native"] += 1
+            return arrays
+        with patch("validation_experiment.load_recording", side_effect=recording):
+            checks, outcomes = compare_results(c, {"gain": .35}, behavior, reports, Path("unused"))
+        self.assertEqual(sum(not value for value in checks.values()), 6)
+        self.assertEqual(len(outcomes["held_out"]), 3)
+        self.assertEqual(len(outcomes["ablations"]), 30)
 
 
 class CheckpointTests(unittest.TestCase):

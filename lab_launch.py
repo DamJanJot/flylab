@@ -26,10 +26,13 @@ def is_lab(url):
 def launch():
     logs = ROOT / "work/lab-stage7"
     logs.mkdir(parents=True, exist_ok=True)
+    # Reuse a current server before taking a newly freed lower port.
     for port in range(8767, 8778):
         url = f"http://127.0.0.1:{port}"
         if is_lab(url):
             return url
+    for port in range(8767, 8778):
+        url = f"http://127.0.0.1:{port}"
         with socket.socket() as probe:
             try:
                 probe.bind(("127.0.0.1", port))

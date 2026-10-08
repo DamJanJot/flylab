@@ -1,0 +1,692 @@
+{
+  "stage": 8,
+  "status": "passed",
+  "biologically_validated": false,
+  "fingerprint": "6f9654ac51a006a0607bf77cc32544161550f3f7ef43c3fd8cf47b7a962adfe4",
+  "trials": 68,
+  "checks": {
+    "left_201_silenced_same_cpg_physics": true,
+    "left_201_no_edges_same_cpg_physics": true,
+    "right_201_silenced_same_cpg_physics": true,
+    "right_201_no_edges_same_cpg_physics": true,
+    "201_no_vision_ignores_panel_side": true,
+    "left_202_silenced_same_cpg_physics": true,
+    "left_202_no_edges_same_cpg_physics": true,
+    "right_202_silenced_same_cpg_physics": true,
+    "right_202_no_edges_same_cpg_physics": true,
+    "202_no_vision_ignores_panel_side": true,
+    "left_203_silenced_same_cpg_physics": true,
+    "left_203_no_edges_same_cpg_physics": true,
+    "right_203_silenced_same_cpg_physics": true,
+    "right_203_no_edges_same_cpg_physics": true,
+    "203_no_vision_ignores_panel_side": true,
+    "left_201_repeat_exact": true,
+    "left_201_repeat_retina_tolerance": true,
+    "right_202_repeat_exact": true,
+    "right_202_repeat_retina_tolerance": true,
+    "all_trials_passed": true,
+    "all_workers_measured": true,
+    "full_brain_suite_passed": true
+  },
+  "per_trial_checks": 790,
+  "selection": {
+    "gain": 0.35,
+    "profile": "candidate_0",
+    "scores": [
+      {
+        "profile": "candidate_0",
+        "gain": 0.35,
+        "cost_per_seed": [
+          12.662511599894255,
+          3.806381998803272
+        ],
+        "mean_cost": 8.234446799348763
+      },
+      {
+        "profile": "candidate_1",
+        "gain": 0.5,
+        "cost_per_seed": [
+          20.938236296247865,
+          17.782316665575205
+        ],
+        "mean_cost": 19.360276480911537
+      },
+      {
+        "profile": "candidate_2",
+        "gain": 0.65,
+        "cost_per_seed": [
+          36.5816412786467,
+          29.114294935308695
+        ],
+        "mean_cost": 32.847968106977696
+      }
+    ],
+    "target_turn_deg": 30.0,
+    "training_seeds": [
+      101,
+      102
+    ],
+    "validation_seeds": [
+      201,
+      202,
+      203
+    ],
+    "criterion": "mean paired absolute turn error + neutral penalty + fall penalty; first candidate breaks ties",
+    "biologically_calibrated": false,
+    "training_result_sha256": {
+      "training-candidate_0-neutral-connected-101": "057a481cc977e0396710cd5dd1b88cfa6984c9e0b15b506e760deb560499af1b",
+      "training-candidate_0-left-connected-101": "05d2c92d240c27319cb6a01be5b4a5a5476d2ec15d0929860b9ec9101727fdea",
+      "training-candidate_0-right-connected-101": "22618920a1c400bfba65cb1621e277b5374159434a2d00a8b0cd1e642863bbbd",
+      "training-candidate_0-neutral-connected-102": "9a6c66f3a3acce4142f29f2f94f5ef893535d773b5ac37fa5a6b6e64fa0f47ab",
+      "training-candidate_0-left-connected-102": "14a0927277b4b633057c89af968b3136aa9d40932cab6f23e6b9ae0fa4bcb596",
+      "training-candidate_0-right-connected-102": "cc1968064f10d1f4878b4c9b75611b902ffe4da2d189e9403ca8da886deaae58",
+      "training-candidate_1-neutral-connected-101": "a45b11fb5c766745386acfe2dab7e02621b20c7444ca723a00783d5b49d5db32",
+      "training-candidate_1-left-connected-101": "ca20a02c4ad8f016c176c98f6ee276b5467e800a37de79d0231442e3f7f93d45",
+      "training-candidate_1-right-connected-101": "cf3c99422c49ed7eaba0769f9d66b7e03ab98da6eac9093f3a16eac5a9b3b77b",
+      "training-candidate_1-neutral-connected-102": "eae503583bcb8dba075a6eab8e2243ab46e0167e67a6abf8f394f1341565b895",
+      "training-candidate_1-left-connected-102": "9754cf4fa2b31f516eb7a86a722dd44a5979e034432bb3ce836b0381fcae3bcb",
+      "training-candidate_1-right-connected-102": "1e1aa5773d323de8a10f39d76c828d7879e1fb2399ec5979d69bb4d7e17ac128",
+      "training-candidate_2-neutral-connected-101": "8df04d8da87d765eb6804c52a2fdbb8904a155a7642fa53b302b202f5f175ae0",
+      "training-candidate_2-left-connected-101": "432a691f044d89718ba3f9c4181de138bce1108cc9b6634ff67fef475aa088f0",
+      "training-candidate_2-right-connected-101": "ffd0ff6276069370dfcd9bdec8f10af86037d87cbabbc5d86a6e832899880562",
+      "training-candidate_2-neutral-connected-102": "ad7afef4147eab38f510b7fe6b9a0f06f12945ecd7c4735b9b71bbb6f982d356",
+      "training-candidate_2-left-connected-102": "a180643eb4770d01f23e7ca4238b36a1a4eb35fb609a6d92d030922eb686f46f",
+      "training-candidate_2-right-connected-102": "2392ebd28cad6d324536b06fe7beb6ffad780a3a367c0053c4a58d2df503fc31"
+    }
+  },
+  "outcomes": {
+    "held_out": [
+      {
+        "seed": 201,
+        "default_cost": 35.799832084990946,
+        "default_falls": 0,
+        "default_turns_relative_neutral_deg": [
+          62.996001659115564,
+          -64.18369950442683
+        ],
+        "selected_cost": 4.456587004580965,
+        "selected_falls": 0,
+        "selected_turns_relative_neutral_deg": [
+          32.82217833261142,
+          -33.88112526172412
+        ]
+      },
+      {
+        "seed": 202,
+        "default_cost": 32.03865058377674,
+        "default_falls": 0,
+        "default_turns_relative_neutral_deg": [
+          66.75871864208389,
+          -54.37765230346118
+        ],
+        "selected_cost": 5.110466240707987,
+        "selected_falls": 0,
+        "selected_turns_relative_neutral_deg": [
+          37.363075611894985,
+          -29.326349333393562
+        ]
+      },
+      {
+        "seed": 203,
+        "default_cost": 34.256227174337944,
+        "default_falls": 0,
+        "default_turns_relative_neutral_deg": [
+          62.40430757412746,
+          -57.20014819298282
+        ],
+        "selected_cost": 5.084114059617632,
+        "selected_falls": 0,
+        "selected_turns_relative_neutral_deg": [
+          33.51221228113474,
+          -29.703042398819225
+        ]
+      }
+    ],
+    "ablations": [
+      {
+        "seed": 201,
+        "scenario": "left",
+        "condition": "disconnected",
+        "heading_deg": -0.9771564488620047,
+        "connected_minus_ablation_heading_deg": 29.379593951820656,
+        "progress_mm": 10.81694686043989,
+        "dn_spikes_left_right": [
+          37,
+          19
+        ],
+        "fell": false
+      },
+      {
+        "seed": 201,
+        "scenario": "left",
+        "condition": "silenced",
+        "heading_deg": -0.9771564488620047,
+        "connected_minus_ablation_heading_deg": 29.379593951820656,
+        "progress_mm": 10.81694686043989,
+        "dn_spikes_left_right": [
+          0,
+          0
+        ],
+        "fell": false
+      },
+      {
+        "seed": 201,
+        "scenario": "left",
+        "condition": "no_edges",
+        "heading_deg": -0.9771564488620047,
+        "connected_minus_ablation_heading_deg": 29.379593951820656,
+        "progress_mm": 10.81694686043989,
+        "dn_spikes_left_right": [
+          0,
+          0
+        ],
+        "fell": false
+      },
+      {
+        "seed": 201,
+        "scenario": "left",
+        "condition": "no_vision",
+        "heading_deg": -7.7221790609550665,
+        "connected_minus_ablation_heading_deg": 36.12461656391372,
+        "progress_mm": 10.457044366202528,
+        "dn_spikes_left_right": [
+          10,
+          18
+        ],
+        "fell": false
+      },
+      {
+        "seed": 201,
+        "scenario": "left",
+        "condition": "no_feedback",
+        "heading_deg": 28.40243750295865,
+        "connected_minus_ablation_heading_deg": 0.0,
+        "progress_mm": 9.75340980274097,
+        "dn_spikes_left_right": [
+          51,
+          18
+        ],
+        "fell": false
+      },
+      {
+        "seed": 201,
+        "scenario": "right",
+        "condition": "disconnected",
+        "heading_deg": -0.9771564488620047,
+        "connected_minus_ablation_heading_deg": -37.32370964251489,
+        "progress_mm": 10.81694686043989,
+        "dn_spikes_left_right": [
+          10,
+          50
+        ],
+        "fell": false
+      },
+      {
+        "seed": 201,
+        "scenario": "right",
+        "condition": "silenced",
+        "heading_deg": -0.9771564488620047,
+        "connected_minus_ablation_heading_deg": -37.32370964251489,
+        "progress_mm": 10.81694686043989,
+        "dn_spikes_left_right": [
+          0,
+          0
+        ],
+        "fell": false
+      },
+      {
+        "seed": 201,
+        "scenario": "right",
+        "condition": "no_edges",
+        "heading_deg": -0.9771564488620047,
+        "connected_minus_ablation_heading_deg": -37.32370964251489,
+        "progress_mm": 10.81694686043989,
+        "dn_spikes_left_right": [
+          0,
+          0
+        ],
+        "fell": false
+      },
+      {
+        "seed": 201,
+        "scenario": "right",
+        "condition": "no_vision",
+        "heading_deg": -7.7221790609550665,
+        "connected_minus_ablation_heading_deg": -30.57868703042183,
+        "progress_mm": 10.457044366202528,
+        "dn_spikes_left_right": [
+          10,
+          18
+        ],
+        "fell": false
+      },
+      {
+        "seed": 201,
+        "scenario": "right",
+        "condition": "no_feedback",
+        "heading_deg": -38.300866091376896,
+        "connected_minus_ablation_heading_deg": 0.0,
+        "progress_mm": 8.430981815518225,
+        "dn_spikes_left_right": [
+          10,
+          59
+        ],
+        "fell": false
+      },
+      {
+        "seed": 202,
+        "scenario": "left",
+        "condition": "disconnected",
+        "heading_deg": -2.775252350518168,
+        "connected_minus_ablation_heading_deg": 35.769915556584046,
+        "progress_mm": 11.099582342763133,
+        "dn_spikes_left_right": [
+          49,
+          21
+        ],
+        "fell": false
+      },
+      {
+        "seed": 202,
+        "scenario": "left",
+        "condition": "silenced",
+        "heading_deg": -2.775252350518168,
+        "connected_minus_ablation_heading_deg": 35.769915556584046,
+        "progress_mm": 11.099582342763133,
+        "dn_spikes_left_right": [
+          0,
+          0
+        ],
+        "fell": false
+      },
+      {
+        "seed": 202,
+        "scenario": "left",
+        "condition": "no_edges",
+        "heading_deg": -2.775252350518168,
+        "connected_minus_ablation_heading_deg": 35.769915556584046,
+        "progress_mm": 11.099582342763133,
+        "dn_spikes_left_right": [
+          0,
+          0
+        ],
+        "fell": false
+      },
+      {
+        "seed": 202,
+        "scenario": "left",
+        "condition": "no_vision",
+        "heading_deg": -4.182917617704944,
+        "connected_minus_ablation_heading_deg": 37.177580823770825,
+        "progress_mm": 10.818242075574227,
+        "dn_spikes_left_right": [
+          15,
+          16
+        ],
+        "fell": false
+      },
+      {
+        "seed": 202,
+        "scenario": "left",
+        "condition": "no_feedback",
+        "heading_deg": 32.99466320606588,
+        "connected_minus_ablation_heading_deg": 0.0,
+        "progress_mm": 9.237171979970974,
+        "dn_spikes_left_right": [
+          68,
+          17
+        ],
+        "fell": false
+      },
+      {
+        "seed": 202,
+        "scenario": "right",
+        "condition": "disconnected",
+        "heading_deg": -2.775252350518168,
+        "connected_minus_ablation_heading_deg": -30.919509388704494,
+        "progress_mm": 11.099582342763133,
+        "dn_spikes_left_right": [
+          17,
+          45
+        ],
+        "fell": false
+      },
+      {
+        "seed": 202,
+        "scenario": "right",
+        "condition": "silenced",
+        "heading_deg": -2.775252350518168,
+        "connected_minus_ablation_heading_deg": -30.919509388704494,
+        "progress_mm": 11.099582342763133,
+        "dn_spikes_left_right": [
+          0,
+          0
+        ],
+        "fell": false
+      },
+      {
+        "seed": 202,
+        "scenario": "right",
+        "condition": "no_edges",
+        "heading_deg": -2.775252350518168,
+        "connected_minus_ablation_heading_deg": -30.919509388704494,
+        "progress_mm": 11.099582342763133,
+        "dn_spikes_left_right": [
+          0,
+          0
+        ],
+        "fell": false
+      },
+      {
+        "seed": 202,
+        "scenario": "right",
+        "condition": "no_vision",
+        "heading_deg": -4.182917617704944,
+        "connected_minus_ablation_heading_deg": -29.51184412151772,
+        "progress_mm": 10.818242075574227,
+        "dn_spikes_left_right": [
+          15,
+          16
+        ],
+        "fell": false
+      },
+      {
+        "seed": 202,
+        "scenario": "right",
+        "condition": "no_feedback",
+        "heading_deg": -33.69476173922266,
+        "connected_minus_ablation_heading_deg": 0.0,
+        "progress_mm": 9.369600704509672,
+        "dn_spikes_left_right": [
+          17,
+          56
+        ],
+        "fell": false
+      },
+      {
+        "seed": 203,
+        "scenario": "left",
+        "condition": "disconnected",
+        "heading_deg": -5.576206169201335,
+        "connected_minus_ablation_heading_deg": 26.370301976496563,
+        "progress_mm": 11.034403508369616,
+        "dn_spikes_left_right": [
+          39,
+          23
+        ],
+        "fell": false
+      },
+      {
+        "seed": 203,
+        "scenario": "left",
+        "condition": "silenced",
+        "heading_deg": -5.576206169201335,
+        "connected_minus_ablation_heading_deg": 26.370301976496563,
+        "progress_mm": 11.034403508369616,
+        "dn_spikes_left_right": [
+          0,
+          0
+        ],
+        "fell": false
+      },
+      {
+        "seed": 203,
+        "scenario": "left",
+        "condition": "no_edges",
+        "heading_deg": -5.576206169201335,
+        "connected_minus_ablation_heading_deg": 26.370301976496563,
+        "progress_mm": 11.034403508369616,
+        "dn_spikes_left_right": [
+          0,
+          0
+        ],
+        "fell": false
+      },
+      {
+        "seed": 203,
+        "scenario": "left",
+        "condition": "no_vision",
+        "heading_deg": -9.034084721996102,
+        "connected_minus_ablation_heading_deg": 29.82818052929133,
+        "progress_mm": 10.770844852696824,
+        "dn_spikes_left_right": [
+          14,
+          17
+        ],
+        "fell": false
+      },
+      {
+        "seed": 203,
+        "scenario": "left",
+        "condition": "no_feedback",
+        "heading_deg": 20.79409580729523,
+        "connected_minus_ablation_heading_deg": 0.0,
+        "progress_mm": 9.894720752661025,
+        "dn_spikes_left_right": [
+          49,
+          18
+        ],
+        "fell": false
+      },
+      {
+        "seed": 203,
+        "scenario": "right",
+        "condition": "disconnected",
+        "heading_deg": -5.576206169201335,
+        "connected_minus_ablation_heading_deg": -36.844952703457395,
+        "progress_mm": 11.034403508369616,
+        "dn_spikes_left_right": [
+          16,
+          51
+        ],
+        "fell": false
+      },
+      {
+        "seed": 203,
+        "scenario": "right",
+        "condition": "silenced",
+        "heading_deg": -5.576206169201335,
+        "connected_minus_ablation_heading_deg": -36.844952703457395,
+        "progress_mm": 11.034403508369616,
+        "dn_spikes_left_right": [
+          0,
+          0
+        ],
+        "fell": false
+      },
+      {
+        "seed": 203,
+        "scenario": "right",
+        "condition": "no_edges",
+        "heading_deg": -5.576206169201335,
+        "connected_minus_ablation_heading_deg": -36.844952703457395,
+        "progress_mm": 11.034403508369616,
+        "dn_spikes_left_right": [
+          0,
+          0
+        ],
+        "fell": false
+      },
+      {
+        "seed": 203,
+        "scenario": "right",
+        "condition": "no_vision",
+        "heading_deg": -9.034084721996102,
+        "connected_minus_ablation_heading_deg": -33.38707415066263,
+        "progress_mm": 10.770844852696824,
+        "dn_spikes_left_right": [
+          14,
+          17
+        ],
+        "fell": false
+      },
+      {
+        "seed": 203,
+        "scenario": "right",
+        "condition": "no_feedback",
+        "heading_deg": -42.42115887265873,
+        "connected_minus_ablation_heading_deg": 0.0,
+        "progress_mm": 8.85300426957513,
+        "dn_spikes_left_right": [
+          16,
+          62
+        ],
+        "fell": false
+      }
+    ],
+    "repeats": [
+      {
+        "scenario": "left",
+        "seed": 201,
+        "state_exact": true,
+        "retina_max_abs": 6.48200511932373e-05
+      },
+      {
+        "scenario": "right",
+        "seed": 202,
+        "state_exact": true,
+        "retina_max_abs": 6.790459156036377e-05
+      }
+    ],
+    "mean_default_cost": 34.031569947701875,
+    "mean_selected_cost": 4.883722434968861,
+    "no_exclusions": true,
+    "statistics": "descriptive paired model seeds; not biological replicates or significance tests"
+  },
+  "limitations": [
+    "Four cells in the body loop; full graph benchmark is separate",
+    "Engineering +/-30 degree target, not measured animal data",
+    "Gain selection never uses held-out seeds; defaults remain unchanged",
+    "CPG and neural seeds co-vary; controls identify interventions, not independent variance components",
+    "No obstacle improvement claimed; stage-6 failures remain",
+    "No VNC, olfaction, flight or biological parameter calibration",
+    "No real-time guarantee; RSS is whole worker process, not neural allocation alone"
+  ],
+  "configuration": {
+    "schema_version": 1,
+    "training_seeds": [
+      101,
+      102
+    ],
+    "validation_seeds": [
+      201,
+      202,
+      203
+    ],
+    "stride_reductions": [
+      0.35,
+      0.5,
+      0.65
+    ],
+    "target_turn_deg": 30.0,
+    "neutral_penalty": 0.25,
+    "fall_penalty_deg": 180.0,
+    "full_brain_duration_s": 0.05
+  },
+  "duration_s": 0.8,
+  "code_sha256": {
+    "behavior_model.py": "6abdd2721accc2dc438ab344ed414ebe4ba4d5a911c0c35223c1d9a5a53cd215",
+    "behavior_experiment.py": "90897706f3fa10aca60d14c280f909f624fad4bf5cf04f59800509b20a77976a",
+    "closed_loop_experiment.py": "e67f124024fc467ca6edd286504a5332d2e3ccee020e3f3bf380c9c4049ebc34",
+    "closed_loop_model.py": "d2c4b567ee783a8c89a1f45b7021101bf9afd30420d7c84590089b197aa6ba07",
+    "sensory_experiment.py": "810301ba659b089a42edc0e483403f6cac4d437c679f05e01343fde08e001f22",
+    "sensory_model.py": "88e0f2efe898e9e8bd927cd6448983cf4ee9a626b09af758ce26387181ea5535",
+    "brain_model.py": "d6882d5a9de83720be6300b0ae89da9d492d0ce666b0c77b0e690c754b9efa06",
+    "flywire_data.py": "8d8766ee1751cdb6af229d74fbc2d6972523c50d493a001d8713f548703a558b",
+    "flylab.py": "decabc92bb4b053cf564d017855f1611cd7fa3cd8ab08030b59c3f045845be89",
+    "brain_experiment.py": "5337d692f632bea3fd255bd4a9be1ae46da997ead87945f4468669059bc8cd3b",
+    "validation_model.py": "5e7643c3de6731d94d69e58fcc96054d19a311a4829a184b772dd56d5eb9f5af",
+    "validation_experiment.py": "df7868a6efccbc57978d3ac06346a4857c7a06df0d863fc49e4795816fda63e6"
+  },
+  "versions": {
+    "numpy": "2.5.3",
+    "scipy": "1.18.1",
+    "brian2": "2.10.1",
+    "flygym": "2.1.0",
+    "mujoco": "3.9.0",
+    "psutil": "7.2.2",
+    "matplotlib": "3.11.2"
+  },
+  "performance": {
+    "median_worker_wall_s": 21.151198350125924,
+    "median_wall_s_per_simulated_s": 26.438997937657405,
+    "max_sampled_peak_rss_bytes": 531849216
+  },
+  "full_brain": {
+    "performance": {
+      "worker_wall_s": 16.127760999836028,
+      "sampled_peak_rss_bytes": 591740928,
+      "largest_process_os_peak_working_set_bytes": 617377792,
+      "memory_samples": 258,
+      "sampling_interval_s": 0.05,
+      "scope": "sampled sum of worker-tree RSS including Windows launcher children; may double-count shared pages; OS peak is largest individual process; includes imports, setup, eyes, physics and export; excludes orchestrator and GPU"
+    },
+    "checks": {
+      "small_matches_raw_import": true,
+      "control_has_no_spikes": true,
+      "stimulus_causes_spikes": true,
+      "gaba_targets_hyperpolarize": true,
+      "silencing_blocks_spikes": true,
+      "same_external_input_when_silenced": true,
+      "repeat_all_arrays_identical": true,
+      "full_finite_state": true,
+      "full_stimulus_causes_spikes": true,
+      "full_repeat_all_arrays_identical": true,
+      "full_control_no_spikes": true
+    },
+    "runs": {
+      "control": {
+        "neurons": 13,
+        "ordered_pairs": 33,
+        "spikes": 0,
+        "run_and_compile_s": 0.4447485003620386
+      },
+      "stimulated": {
+        "neurons": 13,
+        "ordered_pairs": 33,
+        "spikes": 13,
+        "run_and_compile_s": 0.3231164999306202
+      },
+      "repeat": {
+        "neurons": 13,
+        "ordered_pairs": 33,
+        "spikes": 13,
+        "run_and_compile_s": 0.32924719993025064
+      },
+      "silenced": {
+        "neurons": 13,
+        "ordered_pairs": 33,
+        "spikes": 0,
+        "run_and_compile_s": 0.33426549984142184
+      },
+      "full": {
+        "neurons": 139255,
+        "ordered_pairs": 3732460,
+        "spikes": 725,
+        "run_and_compile_s": 3.1819414999336004
+      },
+      "full_repeat": {
+        "neurons": 139255,
+        "ordered_pairs": 3732460,
+        "spikes": 725,
+        "run_and_compile_s": 3.096590300090611
+      },
+      "full_control": {
+        "neurons": 139255,
+        "ordered_pairs": 3732460,
+        "spikes": 0,
+        "run_and_compile_s": 2.795840200036764
+      }
+    },
+    "scope": "isolated full-connectome neural suite; NOT the four-cell body loop"
+  },
+  "artifact_sha256": {
+    "mapping.json": "d133b97f90066f635e35e87e0ae5e0693748c6e3220b4fb01067c5f9ed69dd67",
+    "settings.json": "8548d9097f97e1bb7765aaeccc49d1eaf2c39035b2965b3d56df6fe9cea02f9e",
+    "circuit.npz": "70dc8908443493e2b33a495276bf6b4003df909c3526959d5d97e4ea8004a3ed",
+    "selection.json": "4f35c8d0c69b995f941ab4ad7ff8d736daa975f3ebd4cb2f7ea33ac1bda4ca8a",
+    "selected-behavior.json": "dd6d761967df588b551613b34e64b70b3a3388bacc4cfc4e8a8bda087d204083",
+    "calibration.png": "763f3c743c818f739a64bfd488514e11e9ab589734ad87f01fed002f7047aa55",
+    "ablations.png": "ccc8869b325ff15aa14d3e6d51d38f0c97b814b4e8bf91e9e34b5cd4d64da0e7"
+  }
+}

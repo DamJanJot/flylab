@@ -3,8 +3,8 @@
 Lokalne laboratorium eksperymentow z modelem muszki: biomechanika
 NeuroMechFly/FlyGym w MuJoCo, model neuronowy Brian2 i panel przegladarkowy.
 
-**Stan: etapy 1-7 zakonczone technicznie. Protokol etapu 8 jest wdrozony;
-pelna seria walidacyjna jest w trakcie weryfikacji.** Zamknieta petla uzywa czterech neuronow DNa03/DNa02,
+**Stan: wszystkie 8 etapow zakonczone technicznie; walidacja biologiczna
+pozostaje otwarta.** Zamknieta petla uzywa czterech neuronow DNa03/DNa02,
 czterech rzeczywistych skierowanych par i 645 kontaktow synaptycznych FlyWire.
 Nie jest to biologicznie zweryfikowana symulacja calego mozgu. Wejscia
 wzrokowe i sterowanie CPG sa modelami zastepczymi; nie ma VNC, wechu ani lotu.
@@ -26,6 +26,12 @@ W arenie z przeszkoda bramke osiagnieto w 0/3 prob z podlaczonym obwodem
 i 2/3 bez jego wplywu. Wynik negatywny pozostaje w raporcie; kontroler
 chodu nie jest dowodem poprawnego modelu mozgu.
 
+Etap 8: 68 prob i niezalezne seedy walidacyjne. Wybrana redukcja kroku 0.35
+obnizyla sredni koszt zadania skretu z 34.03 do 4.88 deg-eq na trzech nowych
+seedach. Przeszlo 790 kontroli prob, 22 kontrole serii i 11 kontroli osobnego
+benchmarku neuronowego. To kalibracja inzynierska do celu +/-30 stopni,
+nie dopasowanie do pomiarow zwierzecia. [Wyniki i ograniczenia](VALIDATION.md).
+
 ## Wymagania
 
 Sprawdzone lokalnie: Windows, Python 3.13.7, FlyGym 2.1.0, MuJoCo 3.9.0,
@@ -39,7 +45,7 @@ python -m venv .venv-body
 .\.venv-body\Scripts\python.exe -m unittest discover -s tests
 ```
 
-76 testow przechodzi w zweryfikowanym srodowisku. Powyzej instaluje sie
+79 testow przechodzi w zweryfikowanym srodowisku. Powyzej instaluje sie
 przypiete zaleznosci; nie jest to gwarancja zgodnosci z kazda platforma.
 
 ## Dane i pierwszy eksperyment
@@ -99,7 +105,7 @@ Zapisane w dokumentacji liczby odnosza sie do lokalnych zweryfikowanych prob,
 nie do badan na zwierzetach. Male pliki w `outputs/flywire_demo/` sluza
 starszej eksploracji i importowi testowemu, a nie sterowaniu biomechanika.
 
-## Dalsza praca
+## Walidacja
 
 Protokol etapu 8 mozna uruchomic osobno:
 

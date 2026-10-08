@@ -9,7 +9,7 @@ from unittest.mock import patch
 from flylab import digest, write_json
 from flywire_data import file_sha256
 import lab_validation
-from lab_launch import is_lab
+from lab_launch import is_lab, launch
 
 
 class ValidationPanelTests(unittest.TestCase):
@@ -68,6 +68,13 @@ class ValidationPanelTests(unittest.TestCase):
         for version, expected in ((7, False), (8, True)):
             with patch("lab_launch.urlopen", return_value=BytesIO(json.dumps({"app": "flylab", "version": version}).encode())):
                 self.assertEqual(is_lab("http://127.0.0.1:8767"), expected)
+
+    def test_launcher_reuses_later_port_before_spawning(self):
+        with tempfile.TemporaryDirectory() as temp, patch("lab_launch.ROOT", Path(temp)), \
+                patch("lab_launch.is_lab", side_effect=lambda url: url.endswith(":8768")), \
+                patch("lab_launch.subprocess.Popen") as spawn:
+            self.assertEqual(launch(), "http://127.0.0.1:8768")
+            spawn.assert_not_called()
 
 
 if __name__ == "__main__":
