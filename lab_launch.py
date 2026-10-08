@@ -18,7 +18,7 @@ def is_lab(url):
     try:
         with urlopen(url + "/api/bootstrap", timeout=.5) as response:
             data = json.load(response)
-        return data.get("app") == "flylab" and data.get("version") == 7
+        return data.get("app") == "flylab" and data.get("version") == 8
     except (OSError, ValueError):
         return False
 

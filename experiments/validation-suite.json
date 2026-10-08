@@ -1,0 +1,10 @@
+{
+  "schema_version": 1,
+  "training_seeds": [101, 102],
+  "validation_seeds": [201, 202, 203],
+  "stride_reductions": [0.35, 0.5, 0.65],
+  "target_turn_deg": 30.0,
+  "neutral_penalty": 0.25,
+  "fall_penalty_deg": 180.0,
+  "full_brain_duration_s": 0.05
+}

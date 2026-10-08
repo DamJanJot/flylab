@@ -17,7 +17,7 @@ nie ma jeszcze biomechaniki, pomiaru aktywnosci biologicznej ani petli sensorycz
 | 5. Polaczenie mozg-cialo | Adapter sygnalow zstepujacych i kontroler obwodow ruchowych | Zamknieta petla; interwencja w modelu mozgu zmienia komende i ruch; kontrola z odlaczonym mozgiem | Zakonczony technicznie 2026-10-08; 4-komorkowy obwod sterowania, zastepczy wzrok i VNC |
 | 6. Testy zachowania | Arena z przeszkodami, kierunkowe bodzce, pobudzenie/wyciszenie neuronow | Powtarzalne serie wielu seedow; porownanie baseline z interwencja i kontrolami | Zakonczony technicznie 2026-10-08; 44 proby, 3 seedy; przejscie przeszkody pozostaje ograniczeniem modelu |
 | 7. Panel laboratoryjny | Cialo, sygnaly sensoryczne, aktywnosc neuronow i os czasu obok siebie | Start/pauza/reset, konfiguracja testu, odtwarzanie zapisu; zgodne zegary i jednostki | Zakonczony technicznie 2026-10-08; lokalny panel, odtwarzanie i nowe proby offline |
-| 8. Walidacja i wydajnosc | Benchmark, kalibracja, testy ablacji, dokumentacja ograniczen | Odtwarzalny pakiet eksperymentu; zmierzona szybkosc i pamiec; rozdzielenie wplywu mozgu od kontrolera ruchu | Do realizacji |
+| 8. Walidacja i wydajnosc | Benchmark, kalibracja, testy ablacji, dokumentacja ograniczen | Odtwarzalny pakiet eksperymentu; zmierzona szybkosc i pamiec; rozdzielenie wplywu mozgu od kontrolera ruchu | W trakcie weryfikacji: protokol 68 prob i panel wdrozone; szczegoly w VALIDATION.md |
 
 ## Decyzje techniczne
 

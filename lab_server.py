@@ -15,6 +15,7 @@ import uuid
 
 from flylab import ROOT
 from lab_data import Catalog, read_json, experiment_request, write_live_json as write_checkpoint
+import lab_validation
 
 TERMINAL = {"completed", "failed", "cancelled", "interrupted"}
 
@@ -167,7 +168,11 @@ class Handler(BaseHTTPRequestHandler):
             if route in assets:
                 return self.serve_file(ROOT / "lab_web" / assets[route])
             if route == "/api/bootstrap":
-                return self.json_response({"app": "flylab", "token": self.server.token, "version": 7})
+                return self.json_response({"app": "flylab", "token": self.server.token, "version": 8})
+            if route == "/api/validation":
+                return self.json_response(lab_validation.status())
+            if route.startswith("/validation-plots/"):
+                return self.serve_file(lab_validation.plot(route[len("/validation-plots/"):]))
             if route == "/api/catalog":
                 return self.json_response(self.server.catalog.entries())
             if route == "/api/job":

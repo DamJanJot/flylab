@@ -21,12 +21,53 @@ async function api(path, body) {
   return data;
 }
 function view(name) {
-  for (const key of ["recordings","experiment","results"]) $(key+"-view").hidden=key!==name;
+  for (const key of ["recordings","experiment","results","validation"]) $(key+"-view").hidden=key!==name;
   document.querySelectorAll("[data-view]").forEach(b=>b.classList.toggle("selected",b.dataset.view===name));
   if (name!=="recordings") pause();
   else if(state.detail) requestAnimationFrame(update);
+  if(name==="validation") refreshValidation();
 }
 document.querySelectorAll("[data-view]").forEach(b=>b.addEventListener("click",()=>view(b.dataset.view)));
+let validationLoading=false;
+async function refreshValidation() {
+  if(validationLoading) return;
+  validationLoading=true;$("refresh-validation").disabled=true;
+  try {
+    const data=await api("/api/validation"), r=data.summary;
+    const labels={not_started:"Brak wynikow etapu 8",running:"Obliczenia w toku",partial:"Seria czesciowa",failed:"Niepowodzenie kontroli",passed:"Kontrole techniczne zaliczone"};
+    $("validation-status").textContent=`${labels[data.status]||data.status}${data.planned ? ` / ${data.completed} z ${data.planned} prob` : ""}`;
+    $("validation-progress").hidden=Boolean(r)||!data.planned;
+    $("validation-progress").max=data.planned||1;$("validation-progress").value=data.completed;
+    $("validation-content").hidden=!r;$("download-validation").hidden=!r;
+    if(!r) return;
+    $("validation-gain").textContent=fmt(r.selection.gain);
+    $("validation-checks").textContent=`${Object.values(r.checks).filter(Boolean).length} / ${Object.keys(r.checks).length}`;
+    $("validation-wall").textContent=`${fmt(r.performance.median_wall_s_per_simulated_s,1)} s`;
+    $("validation-memory").textContent=`${fmt(r.performance.max_sampled_peak_rss_bytes/1024**2,0)} MiB`;
+    $("validation-scope").textContent=`Cel inzynierski: +/-${r.selection.target_turn_deg} deg wzgledem proby neutralnej. Koszt sredni: ${fmt(r.outcomes.mean_default_cost)} -> ${fmt(r.outcomes.mean_selected_cost)} deg-eq. Kalibracja biologiczna: niewykonana.`;
+    const appendRow=(body,values)=>{const row=document.createElement("tr");for(const value of values){const cell=document.createElement("td");cell.textContent=value;row.append(cell);}body.append(row);};
+    const body=$("validation-table").querySelector("tbody");body.replaceChildren();
+    for(const row of r.outcomes.held_out) appendRow(body,[row.seed,fmt(row.default_cost),fmt(row.selected_cost),row.selected_turns_relative_neutral_deg.map(x=>fmt(x,1)).join(" / "),`${row.selected_falls} / 3`]);
+    const ablations=$("ablation-table").querySelector("tbody");ablations.replaceChildren();
+    const names={connected:"Podlaczony",disconnected:"Odlaczone wyjscie",silenced:"Wyciszone DNa02",no_edges:"Bez synaps",no_vision:"Bez modulacji wzrokowej",no_feedback:"Bez DNa02 -> DNa03"};
+    for(const [condition,label] of Object.entries(names)){
+      const groups=["left","right"].map(side=>r.outcomes.ablations.filter(x=>x.scenario===side && x.condition===(condition==="connected" ? "disconnected" : condition)));
+      const means=groups.map(rows=>rows.reduce((sum,x)=>sum+x.heading_deg+(condition==="connected" ? x.connected_minus_ablation_heading_deg : 0),0)/rows.length);
+      appendRow(ablations,[label,...means.map(x=>fmt(x,1)),groups[0].length]);
+    }
+    for(const [id,name] of [["calibration-plot","calibration"],["ablation-plot","ablations"]]) {
+      const url=`/validation-plots/${name}?v=${r.fingerprint}`;
+      if($(id).getAttribute("src")!==url) $(id).src=url;
+    }
+    const full=r.full_brain.runs.full;
+    $("validation-brain").textContent=`${full.neurons.toLocaleString("pl-PL")} neuronow / ${full.ordered_pairs.toLocaleString("pl-PL")} par / ${r.configuration.full_brain_duration_s*1000} ms modelu / ${fmt(full.run_and_compile_s)} s obliczen Brian2 z kompilacja / ${full.spikes} impulsow.`;
+  } catch(error) {
+    $("validation-status").textContent="Nie mozna zweryfikowac raportu: "+error.message;
+    $("validation-content").hidden=true;$("download-validation").hidden=true;$("validation-progress").hidden=true;
+  } finally {validationLoading=false;$("refresh-validation").disabled=false;}
+}
+$("refresh-validation").addEventListener("click",refreshValidation);
+setInterval(()=>{if(!$("validation-view").hidden)refreshValidation();},5000);
 function itemLabel(row) { return `${names[row.scenario]}${row.repeat ? " / powtorzenie" : ""}`; }
 function renderList() {
   const query=$("search").value.toLowerCase(), scenario=$("scenario-filter").value;

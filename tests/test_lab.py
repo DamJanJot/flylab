@@ -168,6 +168,13 @@ class HTTPTests(unittest.TestCase):
         self.assertEqual(self.request("/api/control","POST",'{"action":"pause"}',headers)[0],409)
         self.assertEqual(self.request("/api/recordings/%2e%2e%2fsecret")[0],422)
 
+    def test_validation_endpoints_are_read_only_and_allowlisted(self):
+        with patch("lab_server.lab_validation.status", return_value={"status":"not_started", "summary":None}):
+            status, raw = self.request("/api/validation")
+            self.assertEqual(status, 200)
+            self.assertEqual(json.loads(raw)["status"], "not_started")
+        self.assertEqual(self.request("/validation-plots/%2e%2e%2fmanifest.json")[0], 422)
+
 
 if __name__ == "__main__":
     unittest.main()

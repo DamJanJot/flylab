@@ -1,10 +1,16 @@
-# Etap 7 Panel laboratoryjny FlyLab
+# Panel laboratoryjny FlyLab: etapy 7-8
 
 Panel laczy zapis ciala MuJoCo, bodzce, sygnaly sensoryczne, impulsy czterech
 neuronow FlyWire i komendy CPG na wspolnej osi czasu. Pozwala przegladac
 44 proby etapu 6 oraz uruchamiac pojedyncze nowe proby eksploracyjne.
 To lokalne laboratorium modelu z zastepczym wzrokiem i sterowaniem ruchem,
 nie zweryfikowana biologicznie symulacja calego mozgu.
+
+Widok **Walidacja** dodaje odczyt serii etapu 8: postep, wybor parametru,
+niezalezne seedy, ablacje i benchmark. Raport i oba wykresy sa sprawdzane
+przez SHA256 przed udostepnieniem. Czesciowa seria nie pokazuje liczb jako
+wynikow koncowych; uszkodzony raport jest odrzucany. Ten widok jest tylko
+do odczytu, a serie uruchamia `validation_experiment.py`, patrz `VALIDATION.md`.
 
 ## Uruchomienie
 
@@ -16,7 +22,7 @@ w przegladarce. W PowerShell, z katalogu projektu:
 ```
 
 Domyslny adres to `http://127.0.0.1:8767`. Launcher sprawdza tozsamosc
-istniejacego panelu; gdy port zajmuje inna aplikacja, wybiera wolny
+istniejacego panelu i wersje API; gdy port zajmuje inna aplikacja lub starsza wersja, wybiera wolny
 z zakresu 8767..8777. Adres, PID i logi sa w `work/lab-stage7/`.
 Nie trzeba instalowac pakietow. Ikony Lucide sa dolaczone lokalnie wraz
 z licencja; panel nie korzysta z CDN, kont ani uslug zewnetrznych.

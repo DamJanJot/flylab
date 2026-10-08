@@ -3,8 +3,8 @@
 Lokalne laboratorium eksperymentow z modelem muszki: biomechanika
 NeuroMechFly/FlyGym w MuJoCo, model neuronowy Brian2 i panel przegladarkowy.
 
-**Stan: etapy 1-7 zakonczone technicznie. Etap 8, kalibracja i walidacja,
-pozostaje do wykonania.** Zamknieta petla uzywa czterech neuronow DNa03/DNa02,
+**Stan: etapy 1-7 zakonczone technicznie. Protokol etapu 8 jest wdrozony;
+pelna seria walidacyjna jest w trakcie weryfikacji.** Zamknieta petla uzywa czterech neuronow DNa03/DNa02,
 czterech rzeczywistych skierowanych par i 645 kontaktow synaptycznych FlyWire.
 Nie jest to biologicznie zweryfikowana symulacja calego mozgu. Wejscia
 wzrokowe i sterowanie CPG sa modelami zastepczymi; nie ma VNC, wechu ani lotu.
@@ -18,6 +18,8 @@ wzrokowe i sterowanie CPG sa modelami zastepczymi; nie ma VNC, wechu ani lotu.
 - Pauza/wznowienie nowej proby i odtwarzanie zapisow na wspolnej osi czasu.
 - Podglad kamer, trajektorii, impulsow, wejsc, kontaktow i propriocepcji.
 - Hashe danych, konfiguracji i kodu, kontrole numeryczne oraz testy regresji.
+- Oddzielny widok walidacji: zamrozony dobor parametru, niezalezne seedy,
+  ablacje, benchmark i wykresy dostepne po weryfikacji wynikow.
 
 Seria etapu 6: 44 proby, trzy seedy. Reakcja kierunkowa: 6/6 zgodnych prob.
 W arenie z przeszkoda bramke osiagnieto w 0/3 prob z podlaczonym obwodem
@@ -37,7 +39,7 @@ python -m venv .venv-body
 .\.venv-body\Scripts\python.exe -m unittest discover -s tests
 ```
 
-59 testow przechodzi w zweryfikowanym srodowisku. Powyzej instaluje sie
+76 testow przechodzi w zweryfikowanym srodowisku. Powyzej instaluje sie
 przypiete zaleznosci; nie jest to gwarancja zgodnosci z kazda platforma.
 
 ## Dane i pierwszy eksperyment
@@ -85,6 +87,7 @@ Bez danych mozna uruchomic testy jednostkowe lub sam test biomechaniki:
 ## Dokumentacja
 
 - [Plan i wyniki etapow](PLAN.md)
+- [Walidacja, kalibracja inzynierska i benchmark](VALIDATION.md)
 - [Panel i jego zegary](LAB_PANEL.md)
 - [Serie testow zachowania](BEHAVIOR_TESTS.md)
 - [Polaczenie mozgu i ciala](CLOSED_LOOP.md)
@@ -98,6 +101,12 @@ starszej eksploracji i importowi testowemu, a nie sterowaniu biomechanika.
 
 ## Dalsza praca
 
-Etap 8: jawny protokol kalibracji, niezalezne seedy walidacyjne, ablacje
-obwodu, benchmark CPU/pamieci i odtwarzalny raport. Nie wolno utozsamiac
-dopasowania parametrow do zachowania tego symulatora z kalibracja biologiczna.
+Protokol etapu 8 mozna uruchomic osobno:
+
+```powershell
+.\.venv-body\Scripts\python.exe validation_experiment.py
+```
+
+68 prob, seedy doboru 101-102 i walidacji 201-203. Wznowienie przez `--resume`;
+panel "Walidacja" pokazuje postep i zakonczony raport. Dobor parametrow do
+zadania tego symulatora nie jest kalibracja biologiczna.
